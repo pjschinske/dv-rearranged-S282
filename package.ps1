@@ -19,7 +19,7 @@ if ($NoArchive) {
 $ZipOutDir = "$ZipWorkDir/$modId"
 
 New-Item "$ZipOutDir" -ItemType Directory -Force
-Copy-Item -Force -Path $FilesToInclude -Destination "$ZipOutDir"
+Copy-Item -Force -Recurse -Path $FilesToInclude -Destination "$ZipOutDir"
 
 if (!$NoArchive)
 {
