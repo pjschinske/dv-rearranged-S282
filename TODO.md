@@ -1,5 +1,5 @@
 # TODO
-
+- rename 0-8-2 to "River Irt"
 - add reload functionality [https://wiki.nexusmods.com/index.php/How_to_reload_mod_at_runtime_(UMM)](https://wiki.nexusmods.com/index.php/How_to_reload_mod_at_runtime_(UMM))
 
 I thought about adding a new \[axle\] to the PoweredWheelsManager in \[poweredWheels\] but it doesn't seem to be used on the steam locos so I don't think I need to bother.

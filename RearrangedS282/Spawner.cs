@@ -105,8 +105,12 @@ namespace RearrangedS282
 				if (__instance.carType == TrainCarType.LocoSteamHeavy)
 				{
 					Transform interior = __instance.loadedInterior.transform;
-					interior.localPosition = new Vector3(0, 0.1f, 0);
+					interior.localPosition = new Vector3(0, 0.09f, 0);
 					interior.localEulerAngles = new Vector3(0.35f, 0, 0);
+					//The "draft" (i.e the damper) doesn't work well when its moved up.
+					//So we move it back down to where it is in the vanilla game. 
+					Transform draft = interior.Find("Center/Draft");
+					draft.localPosition = new Vector3(0.42f, 1.27f, -0.13f); //(y -= 0.09) 
 				}
 			}
 		}
