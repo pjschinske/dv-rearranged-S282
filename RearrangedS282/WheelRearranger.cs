@@ -246,8 +246,9 @@ namespace RearrangedS282
 			{   // if the second front axle is there, fetch it and hide it
 				secondFrontAxle = secondFrontAxleTransform.gameObject;
 				secondFrontAxle.SetActive(false);
-				secondFrontAxleSupport = loco.transform.Find("LocoS282Body/Static_LOD0/s282_wheels_front_support_2").gameObject;
-				secondFrontAxleSupport.SetActive(false);
+				//TODO: get this to work
+				/*secondFrontAxleSupport = loco.transform.Find("LocoS282Body/Static_LOD0/s282_wheels_front_support_2").gameObject;
+				secondFrontAxleSupport.SetActive(false);*/
 			}
 		}
 
