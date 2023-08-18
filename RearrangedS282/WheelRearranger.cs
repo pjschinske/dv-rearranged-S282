@@ -50,23 +50,80 @@ namespace RearrangedS282
 
 			FixExplodedModel(loco);
 
+			//special wheel arrangements
+			switch (waType)
+			{
+				case WheelArrangementType.s240:
+				case WheelArrangementType.s440:
+					Show4Drivers(loco);
+					break;
+				case WheelArrangementType.s462:
+				case WheelArrangementType.s464:
+					Show6Drivers(loco);
+					break;
+				case WheelArrangementType.s282Big:
+					Show8BigDrivers(loco);
+					break;
+				case WheelArrangementType.s0120:
+				case WheelArrangementType.s2120:
+				case WheelArrangementType.s2122:
+					Show12SmallDrivers(loco);
+					break;
+				default:
+					NoCursedWA(loco);
+					break;
+			}
+			//special leading types
+			switch (waType)
+			{
+				case WheelArrangementType.s440:
+				case WheelArrangementType.s460:
+				case WheelArrangementType.s462:
+				case WheelArrangementType.s464:
+					ShowProper4LeadingWheels(loco);
+					break;
+				default:
+					break;
+			}
+			//special trailing types
+			switch (waType)
+			{
+				case WheelArrangementType.s462:
+					ShowTwoTrailingWheelsFor10CoupledVanilla(loco);
+					break;
+				case WheelArrangementType.s282Big:
+					ShowTwoTrailingWheelsFor10Coupled(loco);
+					break;
+				default:
+					break;
+			}
+			/* //we'll need this if we can't make a 2-12-2 with the big rear wheel
+			if (waType == WheelArrangementType.a2122)
+			{
+				ShowTwoTrailingWheelsFor10Coupled(loco);
+			}*/
+
 			//select leading axle configuration
 			switch (waType)
 			{
-				case WheelArrangementType.a280:
-				case WheelArrangementType.a282:
-				case WheelArrangementType.a284:
-				case WheelArrangementType.a2100:
-				case WheelArrangementType.a2102:
-				case WheelArrangementType.a2104:
+				case WheelArrangementType.s240:
+				case WheelArrangementType.s280:
+				case WheelArrangementType.s282:
+				case WheelArrangementType.s282Big:
+				case WheelArrangementType.s284:
+				case WheelArrangementType.s2100:
+				case WheelArrangementType.s2102:
+				case WheelArrangementType.s2104:
+				case WheelArrangementType.s2120:
+				case WheelArrangementType.s2122:
 					ShowTwoLeadingWheels(loco);
 					break;
-				case WheelArrangementType.a480:
-				case WheelArrangementType.a482:
-				case WheelArrangementType.a484:
-				case WheelArrangementType.a4100:
-				case WheelArrangementType.a4102:
-				case WheelArrangementType.a4104:
+				case WheelArrangementType.s480:
+				case WheelArrangementType.s482:
+				case WheelArrangementType.s484:
+				case WheelArrangementType.s4100:
+				case WheelArrangementType.s4102:
+				case WheelArrangementType.s4104:
 					ShowFourLeadingWheels(loco);
 					break;
 				default:
@@ -76,15 +133,15 @@ namespace RearrangedS282
 			//select drive axle configuration
 			switch (waType)
 			{
-				case WheelArrangementType.a0100:
-				case WheelArrangementType.a0102:
-				case WheelArrangementType.a0104:
-				case WheelArrangementType.a2100:
-				case WheelArrangementType.a2102:
-				case WheelArrangementType.a2104:
-				case WheelArrangementType.a4100:
-				case WheelArrangementType.a4102:
-				case WheelArrangementType.a4104:
+				case WheelArrangementType.s0100:
+				case WheelArrangementType.s0102:
+				case WheelArrangementType.s0104:
+				case WheelArrangementType.s2100:
+				case WheelArrangementType.s2102:
+				case WheelArrangementType.s2104:
+				case WheelArrangementType.s4100:
+				case WheelArrangementType.s4102:
+				case WheelArrangementType.s4104:
 					AddFifthDriveAxle(loco);
 					break;
 				default:
@@ -94,9 +151,10 @@ namespace RearrangedS282
 			//select trailing axle configuration
 			switch (waType)
 			{
-				case WheelArrangementType.a082:
-				case WheelArrangementType.a282:
-				case WheelArrangementType.a482:
+				case WheelArrangementType.s442:
+				case WheelArrangementType.s082:
+				case WheelArrangementType.s282:
+				case WheelArrangementType.s482:
 					switch (Main.settings.x82Options)
 					{
 						case Settings.X82Options.vanilla:
@@ -110,9 +168,10 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.a0102:
-				case WheelArrangementType.a2102:
-				case WheelArrangementType.a4102:
+				case WheelArrangementType.s0102:
+				case WheelArrangementType.s2102:
+				case WheelArrangementType.s4102:
+				case WheelArrangementType.s2122:
 					switch (Main.settings.x102Options)
 					{
 						case Settings.X102Options.vanilla:
@@ -123,14 +182,16 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.a084:
-				case WheelArrangementType.a284:
-				case WheelArrangementType.a484:
+				case WheelArrangementType.s444:
+				case WheelArrangementType.s084:
+				case WheelArrangementType.s284:
+				case WheelArrangementType.s484:
 					ShowFourTrailingWheels(loco);
 					break;
-				case WheelArrangementType.a0104:
-				case WheelArrangementType.a2104:
-				case WheelArrangementType.a4104:
+				case WheelArrangementType.s464:
+				case WheelArrangementType.s0104:
+				case WheelArrangementType.s2104:
+				case WheelArrangementType.s4104:
 					ShowFourTrailingWheelsFor10Coupled(loco);
 					break;
 				default:
@@ -166,6 +227,63 @@ namespace RearrangedS282
 			carRollingAudioModule.ResetJointSoundValues();
 
 			skipWheelArrangementChange = false;
+		}
+
+		//reset to standard 0-8-0
+		private static void NoCursedWA(TrainCar loco)
+		{
+			Transform driveL = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism L");
+			Transform driveR = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism R");
+			driveL.localPosition = Vector3.zero;
+			driveR.localPosition = Vector3.zero;
+			driveL.localScale = new Vector3(-1, 1, 1);
+			driveR.localScale = Vector3.one;
+			driveL.Find("s282_wheels_driving_1").gameObject.SetActive(true);
+			driveR.Find("s282_wheels_driving_1").gameObject.SetActive(true);
+		}
+
+		private static void ShowProper4LeadingWheels(TrainCar loco)
+		{
+			loco.transform.Find("Axle_F/bogie_car/[axle] 1").gameObject.SetActive(true);
+			loco.transform.Find("LocoS282A_Body/Static_LOD0/s282_wheels_front_support").gameObject.SetActive(true);
+			loco.transform.Find("LocoS282A_Body/Static_LOD1/s282_wheels_front_support_LOD1").gameObject.SetActive(true);
+			Transform secondFrontAxle = loco.transform.Find("Axle_F/bogie_car/[axle] 2");
+			secondFrontAxle.gameObject.SetActive(true);
+			loco.transform.Find("LocoS282A_Body/Static_LOD0/s282_wheels_front_support_2").gameObject.SetActive(true);
+			loco.transform.Find("LocoS282A_Body/Static_LOD1/s282_wheels_front_support_2_LOD1").gameObject.SetActive(true);
+		}
+
+		private static void Show12SmallDrivers(TrainCar loco)
+		{
+			
+		}
+
+		//embiggens drivers for the high-speed 2-8-2
+		private static void Show8BigDrivers(TrainCar loco)
+		{
+			Transform driveL = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism L");
+			Transform driveR = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism R");
+			driveL.localPosition = new Vector3(0, 0, -1.6f);
+			driveR.localPosition = new Vector3(0, 0, -1.6f);
+			driveL.localScale = new Vector3(-1, 1.2f, 1.2f);
+			driveR.localScale = new Vector3(1, 1.2f, 1.2f);
+		}
+
+		private static void Show6Drivers(TrainCar loco)
+		{
+			Transform driveL = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism L");
+			Transform driveR = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism R");
+			driveL.localPosition = new Vector3(0, 0, -2.5f);
+			driveR.localPosition = new Vector3(0, 0, -2.5f);
+			driveL.localScale = new Vector3(-1, 1.35f, 1.35f);
+			driveR.localScale = new Vector3(1, 1.35f, 1.35f);
+			driveL.Find("s282_wheels_driving_1").gameObject.SetActive(false);
+			driveR.Find("s282_wheels_driving_1").gameObject.SetActive(false);
+		}
+
+		private static void Show4Drivers(TrainCar loco)
+		{
+			
 		}
 
 		// Exploded locos are handled separately from regular locos, so we need to alter

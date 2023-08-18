@@ -72,7 +72,7 @@ namespace RearrangedS282
 					}
 					else
 					{
-						WheelRearranger.SwitchWheelArrangement(__instance, (int)WheelArrangementType.a282);
+						WheelRearranger.SwitchWheelArrangement(__instance, (int)WheelArrangementType.s282);
 					}
 				}
 			}

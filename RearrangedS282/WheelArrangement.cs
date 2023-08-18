@@ -9,24 +9,35 @@ namespace RearrangedS282
 {
 	public enum WheelArrangementType
 	{
-		a080 = 0,
-		a082,
-		a084,
-		a280,
-		a282,
-		a284,
-		a480,
-		a482,
-		a484,
-		a0100,
-		a0102,
-		a0104,
-		a2100,
-		a2102,
-		a2104,
-		a4100,
-		a4102,
-		a4104,
+		s240 = 0,
+		s440,
+		s442,
+		s444,
+		s460,
+		s462,
+		s464,
+		s080,
+		s082,
+		s084,
+		s280,
+		s282,
+		s282Big,
+		s284,
+		s480,
+		s482,
+		s484,
+		s0100,
+		s0102,
+		s0104,
+		s2100,
+		s2102,
+		s2104,
+		s4100,
+		s4102,
+		s4104,
+		s0120,
+		s2120,
+		s2122
 	}
 
 	public static class WheelArrangement
@@ -38,11 +49,19 @@ namespace RearrangedS282
 
 		public static readonly string[] WheelArrangementNames =
 		{
+			"2-4-0 Porter",
+			"4-4-0 American",
+			"4-4-2 Atlantic",
+			"4-4-4 Reading"
+			"4-6-0 Ten-wheeler",
+			"4-6-2 Pacific",
+			"4-6-4 Hudson",
 			"0-8-0 Eight–wheel switcher",
 			"0-8-2",
 			"0-8-4",
 			"2-8-0 Consolidation",
 			"2-8-2 Mikado",
+			"2-8-2 High-speed Mikado",
 			"2-8-4 Berkshire",
 			"4-8-0 Twelve wheeler",
 			"4-8-2 Mountain",
@@ -55,7 +74,10 @@ namespace RearrangedS282
 			"2-10-4 Texas",
 			"4-10-0 Mastodon",
 			"4-10-2 Southern Pacific",
-			"4-10-4"
+			"4-10-4",
+			"0-12-0 Twelve-wheel switcher",
+			"2-12-0 Centipede",
+			"2-12-2"
 		};
 	}
 }
