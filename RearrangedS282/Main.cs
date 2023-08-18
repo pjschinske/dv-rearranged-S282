@@ -16,7 +16,7 @@ namespace RearrangedS282
 		private static bool Load(UnityModManager.ModEntry modEntry)
 		{
 			Logger = modEntry.Logger;
-			Harmony? harmony = null;
+			Harmony harmony = null;
 
 			settings = Settings.Load<Settings>(modEntry);
 			modEntry.OnGUI = OnGUI;

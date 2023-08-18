@@ -29,6 +29,7 @@
 		<Reference Include="UnityEngine.AudioModule" />
 		<Reference Include="UnityEngine.PhysicsModule" />
 		<Reference Include="UnityEngine.AssetBundleModule" />
+		<Reference Include="UnityEngine.ParticleSystemModule" />
 	</ItemGroup>
 
 	<!-- Mod Loader -->

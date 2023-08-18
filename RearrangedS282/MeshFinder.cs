@@ -63,7 +63,7 @@ namespace RearrangedS282
 			//side
 			new Range(1915, 1935),
 			//top chamfer
-			new Range(5733, 5735),
+			//new Range(5733, 5735) // these points are already being shifted, don't need to shift twice
 			new Range(5739, 5759),
 			//bottom chamfer
 			new Range(1892, 1893),

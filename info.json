@@ -1,6 +1,6 @@
 {
   "Id": "RearrangedS282",
-  "Version": "1.0.1",
+  "Version": "1.0.2",
   "DisplayName": "Rearranged S282",
   "Author": "SatiricRug",
   "EntryMethod": "RearrangedS282.Main.Load",

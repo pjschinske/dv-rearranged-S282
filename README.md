@@ -28,7 +28,7 @@ This mod doesn't rely on Custom Car Loader. Instead, it copies and pastes parts 
 
 I've also attempted to alter the physics of the locomotive for the different wheel arrangements, but the differences are fairly subtle.
 
-I've also had to alter the mesh of the S282 around the firebox to get rid of some clipping with the fifth drive wheels. This mod automatically extracts the mesh from the game files using [a fork of AssetStudio](https://github.com/aelurum/AssetStudio). It then loads the mesh back into the game, alters the mesh. It then swaps out the existing S282 mesh for the altered mesh every time an S282 spawns in.
+I've also had to alter the mesh of the S282 around the firebox to get rid of some clipping with the fifth drive wheels. This mod automatically extracts the mesh from the game files using [a fork of AssetStudio](https://github.com/aelurum/AssetStudio). It then loads the mesh back into the game and alters the mesh. It then swaps out the existing S282 mesh for the altered mesh every time an S282 spawns in.
 
 ## Will you add other wheel arrangements?
 

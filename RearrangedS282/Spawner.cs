@@ -11,6 +11,7 @@ using DV.ThingTypes;
 using LocoSim.Implementations;
 using UnityEngine;
 using static Oculus.Avatar.CAPI;
+using DV.ModularAudioCar;
 
 namespace RearrangedS282
 {
@@ -20,25 +21,29 @@ namespace RearrangedS282
 		private static void fixS282ClippingThroughRail(ref TrainCar loco)
 		{
 			Main.Logger.Log("Fixing S282 clipping through rails");
-			loco.transform.Find("LocoS282A_Body").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("LocoS282A_Body").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("LocoS282A_Body/Static_LOD0").localPosition = new Vector3(0, 0.09f, 0);
+			loco.transform.Find("LocoS282A_Body/Static_LOD0").localEulerAngles = new Vector3(0.22f, 0, 0);
+			loco.transform.Find("LocoS282A_Body/MovingParts_LOD0").localPosition = new Vector3(0, 0.09f, 0);
+			loco.transform.Find("LocoS282A_Body/MovingParts_LOD0").localEulerAngles = new Vector3(0.22f, 0, 0);
 			loco.transform.Find("[interior LOD]").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("[interior LOD]").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("[interior LOD]").localEulerAngles = new Vector3(0.22f, 0, 0);
 			loco.transform.Find("[buffers]").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("[buffers]").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("[buffers]").localEulerAngles = new Vector3(0.22f, 0, 0);
 			loco.transform.Find("[cab lights] - gearlights").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("[cab lights] - gearlights").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("[cab lights] - gearlights").localEulerAngles = new Vector3(0.22f, 0, 0);
 
 			loco.transform.Find("LocoS282A_Headlights").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("LocoS282A_Headlights").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("LocoS282A_Headlights").localEulerAngles = new Vector3(0.22f, 0, 0);
 			loco.transform.Find("LocoS282A_Particles").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("LocoS282A_Particles").localEulerAngles = new Vector3(0.35f, 0, 0);
-			loco.transform.Find("[car plate anchor1]").localEulerAngles = new Vector3(0.35f, 0, 0);
-			loco.transform.Find("[car plate anchor2]").localEulerAngles = new Vector3(-0.35f, 180f, 0);
-			loco.transform.Find("[collision]").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("[collision]").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("LocoS282A_Particles").localEulerAngles = new Vector3(0.22f, 0, 0);
+			loco.transform.Find("[car plate anchor1]").localEulerAngles = new Vector3(0.22f, 0, 0);
+			loco.transform.Find("[car plate anchor2]").localEulerAngles = new Vector3(-0.22f, 180f, 0);
+			//loco.transform.Find("[collision]").localPosition = new Vector3(0, 0.09f, 0);
+			//loco.transform.Find("[collision]").localEulerAngles = new Vector3(0.35f, 0, 0);
 			loco.transform.Find("[bogies]").localPosition = new Vector3(0, 0.09f, 0);
-			loco.transform.Find("[bogies]").localEulerAngles = new Vector3(0.35f, 0, 0);
+			loco.transform.Find("[bogies]").localEulerAngles = new Vector3(0.22f, 0, 0);
+			loco.transform.Find("[coupler rear]").localEulerAngles += new Vector3(0, 0.09f, 0);
+			loco.transform.Find("[coupler front]").localEulerAngles += new Vector3(0, 0.09f, 0);
 
 			//now for the interior
 			Main.Logger.Log("Fixing an S282 interior");
@@ -80,17 +85,17 @@ namespace RearrangedS282
 		{
 			static void Postfix(ref TrainCar __instance)
 			{
-				if (__instance.carType == TrainCarType.LocoSteamHeavy)
+				if (__instance is not null
+					&& __instance.carType == TrainCarType.LocoSteamHeavy)
 				{
-					__instance.loadedExternalInteractables.transform.localPosition = new Vector3(0, 0.1f, 0);
-					__instance.loadedExternalInteractables.transform.localEulerAngles = new Vector3(0.35f, 0, 0);
+					__instance.loadedExternalInteractables.transform.localPosition = new Vector3(0, 0.09f, 0);
+					__instance.loadedExternalInteractables.transform.localEulerAngles = new Vector3(0.22f, 0, 0);
 					//this seems to be throwing a null pointer exception, but it also seems to be working...
 					//added this "off and on again" because it seems to be necessary to make the external
 					//interactables actually show up in the right place.
 					//TODO: Maybe I could make this a prefix to get rid of these lines?
 					__instance.loadedExternalInteractables.gameObject.SetActive(false);
 					__instance.loadedExternalInteractables.gameObject.SetActive(true);
-
 				}
 			}
 		}
@@ -106,11 +111,61 @@ namespace RearrangedS282
 				{
 					Transform interior = __instance.loadedInterior.transform;
 					interior.localPosition = new Vector3(0, 0.09f, 0);
-					interior.localEulerAngles = new Vector3(0.35f, 0, 0);
+					interior.localEulerAngles = new Vector3(0.22f, 0, 0);
 					//The "draft" (i.e the damper) doesn't work well when its moved up.
 					//So we move it back down to where it is in the vanilla game. 
 					Transform draft = interior.Find("Center/Draft");
-					draft.localPosition = new Vector3(0.42f, 1.27f, -0.13f); //(y -= 0.09) 
+					draft.localPosition = new Vector3(0.42f, 1.27f, -0.13f); //(y -= 0.09)
+					//But we make it look like it's where it should be
+					Transform draftModelParent = draft.Find("C_Draft_pivot/C_Damper");
+					draftModelParent.Find("model").localPosition = new Vector3(0, -0.57f, 0);
+					draftModelParent.Find("handle collider").localPosition = new Vector3(0, 0.09f, 0.07f);
+					draftModelParent.Find("body collider").localPosition = new Vector3(0, -0.24f, 0);
+
+					//also fix the injector handle and the valves on the hydrostatic lubricator
+					Transform valves = interior.Find("Left/Valves");
+					if (valves is null)
+					{
+						Main.Logger.Error($"Valve parent can't be found");
+						return;
+					}
+
+					Transform c_blowdown = valves.Find("Blowdown/C_Blowdown");
+					Transform c_bell = valves.Find("Bell/C_Bell");
+					Transform c_blower = valves.Find("Blower/C_Blower");
+					if (c_blowdown is null || c_bell is null || c_blower is null)
+					{
+						Main.Logger.Error("Valves can't be found");
+						return;
+					}
+
+					HingeJoint c_blowdown_hinge = c_blowdown.GetComponent<HingeJoint>();
+					HingeJoint c_bell_hinge = c_bell.GetComponent<HingeJoint>();
+					HingeJoint c_blower_hinge = c_blower.GetComponent<HingeJoint>();
+					if (c_blowdown_hinge is null || c_bell_hinge is null || c_blower_hinge is null)
+					{
+						Main.Logger.Error("Couldn't find valve hinges");
+						return;
+					}
+
+					c_blowdown_hinge.autoConfigureConnectedAnchor = false;
+					c_bell_hinge.autoConfigureConnectedAnchor = false;
+					c_blower_hinge.autoConfigureConnectedAnchor = false;
+					c_blowdown_hinge.connectedAnchor += new Vector3(0, 0.09f, 0.008f);
+					c_bell_hinge.connectedAnchor += new Vector3(0, 0.09f, 0.008f);
+					c_blower_hinge.connectedAnchor += new Vector3(0, 0.09f, 0.008f);
+
+					//also do the injector handle
+					Transform c_injector = valves.parent.Find("Injector/C_Injector");
+					HingeJoint c_injector_hinge = c_injector.GetComponent<HingeJoint>();
+					c_injector_hinge.autoConfigureConnectedAnchor = false;
+					c_injector_hinge.connectedAnchor += new Vector3(0, 0.09f, 0.08f);
+
+					//also do the reverser
+					Transform c_reverser = interior.Find("Right/CutoffReverser/C_CutoffReverser");
+					HingeJoint c_reverser_hinge = c_reverser.GetComponent<HingeJoint>();
+					c_reverser_hinge.autoConfigureConnectedAnchor = false;
+					c_reverser_hinge.connectedAnchor += new Vector3(0, 0.09f, 0);
 				}
 			}
 		}
