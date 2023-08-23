@@ -28,6 +28,7 @@ if ($IncludeBuildNum) {
         $modVersion = $modVersion.SubString(0, $indexOfPlus)
     }
 }
+echo "version: " + $modVersion
 $modInfo.Version = $modVersion
 $modInfo | ConvertTo-Json | Out-File "Info.json"
 
