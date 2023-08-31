@@ -1,15 +1,13 @@
-# Rearranged SH282
+# Rearranged S282
 
 This is a Derail Valley mod that changes the [wheel arrangement](https://en.wikipedia.org/wiki/Wheel_arrangement) of the S282 locomotive.
 
 It can convert the S282 into any of these:
-- 2-4-0 Porter
 - 4-4-0 American
 - 4-4-2 Atlantic
 - 4-4-4 Reading
 - 4-6-0 Ten-wheeler
 - 4-6-2 Pacific
-- 4-6-4 Hudson
 - 0-8-0 Eight-wheel switcher
 - 0-8-2
 - 0-8-4
