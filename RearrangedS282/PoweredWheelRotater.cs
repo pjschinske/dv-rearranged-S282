@@ -22,7 +22,7 @@ namespace RearrangedS282
 
 		public void Update()
 		{
-			//if (coupledWheel != null)
+			if (coupledWheel is not null)
 			{
 				this.transform.localEulerAngles = coupledWheel.transform.localEulerAngles;
 			}

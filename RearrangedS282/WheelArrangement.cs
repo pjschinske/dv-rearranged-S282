@@ -9,13 +9,13 @@ namespace RearrangedS282
 {
 	public enum WheelArrangementType
 	{
-		s240 = 0,
-		s440,
+		//s240 = 0,
+		s440 = 0,
 		s442,
 		s444,
 		s460,
 		s462,
-		s464,
+		/*s464,*/
 		s080,
 		s082,
 		s084,
@@ -37,7 +37,8 @@ namespace RearrangedS282
 		s4104,
 		s0120,
 		s2120,
-		s2122
+		s2122,
+		s4122
 	}
 
 	public static class WheelArrangement
@@ -49,13 +50,13 @@ namespace RearrangedS282
 
 		public static readonly string[] WheelArrangementNames =
 		{
-			"2-4-0 Porter",
+			//"2-4-0 Porter",
 			"4-4-0 American",
 			"4-4-2 Atlantic",
-			"4-4-4 Reading"
+			"4-4-4 Reading",
 			"4-6-0 Ten-wheeler",
 			"4-6-2 Pacific",
-			"4-6-4 Hudson",
+			/*"4-6-4 Hudson",*/
 			"0-8-0 Eight–wheel switcher",
 			"0-8-2",
 			"0-8-4",
@@ -76,8 +77,9 @@ namespace RearrangedS282
 			"4-10-2 Southern Pacific",
 			"4-10-4",
 			"0-12-0 Twelve-wheel switcher",
-			"2-12-0 Centipede",
-			"2-12-2"
+			"2-12-0",
+			"2-12-2",
+			"4-12-2 Union Pacific"
 		};
 	}
 }

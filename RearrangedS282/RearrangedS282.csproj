@@ -20,6 +20,8 @@
 		</Reference>
 		<Reference Include="DV.Utils">
 		</Reference>
+		<Reference Include="Newtonsoft.Json">
+		</Reference>
 	</ItemGroup>
 
 	<!-- Unity -->
@@ -27,7 +29,9 @@
 		<Reference Include="UnityEngine" />
 		<Reference Include="UnityEngine.CoreModule" />
 		<Reference Include="UnityEngine.AudioModule" />
+		<Reference Include="UnityEngine.IMGUIModule" />
 		<Reference Include="UnityEngine.PhysicsModule" />
+		<Reference Include="UnityEngine.AnimationModule" />
 		<Reference Include="UnityEngine.AssetBundleModule" />
 		<Reference Include="UnityEngine.ParticleSystemModule" />
 	</ItemGroup>
@@ -48,12 +52,29 @@
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- Copy to build folder -->
 		<Copy SourceFiles="$(TargetPath)" DestinationFolder="../build/" />
+		<Copy SourceFiles="$(ProjectDir)..\animation_curves.json" DestinationFolder="../build/assets" />
 
 		<!-- Package after Release build -->
+		<Exec Condition="'$(ConfigurationName)' == 'Debug' And '$(OS)' == 'Windows_NT'" Command="powershell -executionpolicy bypass -Command &quot;(../package.ps1 -IncludeBuildNum)&quot;" />
+		<Exec Condition="'$(ConfigurationName)' == 'Debug' And '$(OS)' != 'Windows_NT'" Command="pwsh  -Command &quot;(../package.ps1 -IncludeBuildNum)&quot;" />
+
 		<Exec Condition="'$(ConfigurationName)' == 'Release' And '$(OS)' == 'Windows_NT'" Command="powershell -executionpolicy bypass -Command &quot;(../package.ps1)&quot;" />
 		<Exec Condition="'$(ConfigurationName)' == 'Release' And '$(OS)' != 'Windows_NT'" Command="pwsh  -Command &quot;(../package.ps1)&quot;" />
 	</Target>

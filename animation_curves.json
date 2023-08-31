@@ -1,0 +1,59 @@
+[
+    {
+        "ClipInstanceID": 226630,
+        "CurveInfos": [
+            {
+                "PathKey": "s282_mech_wheels_connect:UnityEngine.Transform:m_LocalPosition.y",
+                "Keys": [
+                    {
+                        "Value": 0.37627077,
+                        "InTangent": 0,
+                        "InWeight": 0.33333334,
+                        "OutTangent": 0,
+                        "OutWeight": 0.33333334,
+                        "Time": 0,
+                        "WeightedMode": 0
+                    },
+                    {
+                        "Value": 0.712,
+                        "InTangent": 2.2599494,
+                        "InWeight": 0.33333334,
+                        "OutTangent": 2.2599494,
+                        "OutWeight": 0.33333334,
+                        "Time": 0.25,
+                        "WeightedMode": 0
+                    },
+                    {
+                        "Value": 2.044,
+                        "InTangent": 0,
+                        "InWeight": 0.33333334,
+                        "OutTangent": 0,
+                        "OutWeight": 0.33333334,
+                        "Time": 0.5,
+                        "WeightedMode": 0
+                    },
+                    {
+                        "Value": 0.712,
+                        "InTangent": -2.3513615,
+                        "InWeight": 0.33333334,
+                        "OutTangent": -2.3513615,
+                        "OutWeight": 0.33333334,
+                        "Time": 0.75,
+                        "WeightedMode": 0
+                    },
+                    {
+                        "Value": 0.371,
+                        "InTangent": 0,
+                        "InWeight": 0.33333334,
+                        "OutTangent": 0,
+                        "OutWeight": 0.33333334,
+                        "Time": 1,
+                        "WeightedMode": 0
+                    }
+                ],
+                "PreWrapMode": 0,
+                "PostWrapMode": 0
+            }
+        ]
+    }
+]

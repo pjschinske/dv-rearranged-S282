@@ -45,7 +45,7 @@ namespace RearrangedS282
 			Mesh newS282Mesh = UnityEngine.Object.Instantiate(MeshFinder.Instance.S282Mesh);
 			//for some reason the OBJloader flips the mesh left to right, so we have to flip it back
 			__instance.transform.Find("LocoS282A_Body/Static_LOD0/s282_locomotive_body").localScale = new Vector3(-1, 1, 1);
-			//newS282Mesh.UploadMeshData(true);
+			newS282Mesh.UploadMeshData(true);
 			filter.sharedMesh = newS282Mesh;
 			Main.Logger.Log("Loaded new S282 mesh");
 		}

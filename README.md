@@ -3,11 +3,19 @@
 This is a Derail Valley mod that changes the [wheel arrangement](https://en.wikipedia.org/wiki/Wheel_arrangement) of the S282 locomotive.
 
 It can convert the S282 into any of these:
+- 2-4-0 Porter
+- 4-4-0 American
+- 4-4-2 Atlantic
+- 4-4-4 Reading
+- 4-6-0 Ten-wheeler
+- 4-6-2 Pacific
+- 4-6-4 Hudson
 - 0-8-0 Eight-wheel switcher
 - 0-8-2
 - 0-8-4
 - 2-8-0 Consolidation
 - 2-8-2 Mikado (which I've altered the look of, although you can switch it back to the vanilla look in the mod's settings)
+- 2-8-2 High-speed Mikado
 - 2-8-4 Berkshire
 - 4-8-0 Twelve Wheeler
 - 4-8-2 Mountain
@@ -21,14 +29,31 @@ It can convert the S282 into any of these:
 - 4-10-0 Mastodon
 - 4-10-2 Southern Pacific
 - 4-10-4
+- 0-12-0 Twelve-wheel switcher
+- 2-12-0 Centipede
+- 2-12-2
+- 4-12-2 Union Pacific
+
+## Locomotives with altered driver size
+
+Version 1.1.0 has added new wheel arrangements where the drive wheels and valve gear have been scaled up or down. In the future, I *might* make custom valve gear with the correct animations and proportions, but for now you'll have to deal with the cursed valve gear.
+
+- All *x*-4-*x* locomotives have 82 inch drive wheels (~40% bigger)
+- All *x*-6-*x* locomotives have 72 inch drive wheels (~30% bigger)
+- The high-speed 2-8-2 Mikado has 67 inch drive wheels (~20% bigger)
+- All *x*-12-*x* locomotives have 48 inch drive wheels (~15% smaller)
+
+All others have the stock 56 inch drive wheels.
 
 ## How does it work?
 
 This mod doesn't rely on Custom Car Loader. Instead, it copies and pastes parts of the existing S282 at runtime and moves them around.
 
-I've also attempted to alter the physics of the locomotive for the different wheel arrangements, but the differences are fairly subtle.
+For the locomotives with different sized drive wheels, I'm just scaling the drive wheels and valve gear.
 
-I've also had to alter the mesh of the S282 around the firebox to get rid of some clipping with the fifth drive wheels. This mod automatically extracts the mesh from the game files using [a fork of AssetStudio](https://github.com/aelurum/AssetStudio). It then loads the mesh back into the game and alters the mesh. It then swaps out the existing S282 mesh for the altered mesh every time an S282 spawns in.
+I'm also altering the physics of the locomotive for the different wheel arrangements. Locomotives with a higher axle load on the drivers (from having either fewer drivers, or fewer leading/trailing wheels) will wheelslip easier. Locomotives with larger drivers will have a higher top speed but less tractive effort. Locomotives with smaller wheels will have more tractive effort but a lower top speed.
+
+I've had to alter the mesh of the S282 around the firebox to get rid of some clipping with the fifth drive wheels. This mod automatically extracts the mesh from the game files using [a fork of AssetStudio](https://github.com/aelurum/AssetStudio). It then loads the mesh back into the game and alters the mesh. It then swaps out the existing S282 mesh for the altered mesh every time an S282 spawns in.
 
 ## Will you add other wheel arrangements?
 
@@ -36,9 +61,7 @@ The wheel arrangements listed above are the only ones I could find that looked v
 
 All others either:
 - would look too strange
-	- 2-6-0, 4-4-0, etc.
-- would require significant clipping 
-	- Anything with 12 drivers would have the rearmost drivers sticking through the cab. Shrinking the wheels would work but would require significant changes to the valve gear
+	- 2-6-0, 2-4-0, 4-14-4, etc.
 - or would take too much effort to add to the game
 	- e.g. 4-4-4-4, sorry Pennsy fans
 

@@ -368,7 +368,8 @@ namespace RearrangedS282
 			{
 				Main.Logger.Error("Tried to rearrange something that wasn't an S282");
 			}
-			WheelRearranger.SwitchWheelArrangement(SelectedCar, selectedWheelArrangement);
+			SelectedCar.GetComponent<WheelRearranger>()
+				.SwitchWheelArrangement(selectedWheelArrangement);
 		}
 
 		private void SetSelectedWheelArrangement(int wa)

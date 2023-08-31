@@ -12,6 +12,7 @@ using LocoSim.Implementations;
 using UnityEngine;
 using static Oculus.Avatar.CAPI;
 using DV.ModularAudioCar;
+using JetBrains.Annotations;
 
 namespace RearrangedS282
 {
@@ -20,7 +21,7 @@ namespace RearrangedS282
 		//This fixes the S282 clipping through the rail by shifting and rotating everything in the S282.
 		private static void fixS282ClippingThroughRail(ref TrainCar loco)
 		{
-			Main.Logger.Log("Fixing S282 clipping through rails");
+			/*Main.Logger.Log("Fixing S282 clipping through rails");
 			loco.transform.Find("LocoS282A_Body/Static_LOD0").localPosition = new Vector3(0, 0.09f, 0);
 			loco.transform.Find("LocoS282A_Body/Static_LOD0").localEulerAngles = new Vector3(0.22f, 0, 0);
 			loco.transform.Find("LocoS282A_Body/MovingParts_LOD0").localPosition = new Vector3(0, 0.09f, 0);
@@ -52,7 +53,7 @@ namespace RearrangedS282
 			//Main.Logger.Log("Halfway through");
 			loco.interior.Find("[camera dampening]").localPosition = new Vector3(0, 0.09f, 0);
 			loco.interior.Find("[cab]").localPosition += new Vector3(0, 0.09f, 0);
-			Main.Logger.Log("Finished fixing S282 clipping through rails");
+			Main.Logger.Log("Finished fixing S282 clipping through rails");*/
 		}
 
 		[HarmonyPatch(typeof(TrainCar), nameof(TrainCar.Start))]
@@ -66,19 +67,12 @@ namespace RearrangedS282
 				{
 					fixS282ClippingThroughRail(ref __instance);
 
-					if (Main.settings.spawnRandomWA)
-					{
-						WheelRearranger.SwitchWheelArrangementRandom(__instance);
-					}
-					else
-					{
-						WheelRearranger.SwitchWheelArrangement(__instance, (int)WheelArrangementType.s282);
-					}
+					__instance.gameObject.AddComponent<WheelRearranger>();
 				}
 			}
 		}
 
-		//Moves S282's external interactables (windows, outside hand valves, etc) up to match the body
+		/*//Moves S282's external interactables (windows, outside hand valves, etc) up to match the body
 		//We need to move these up because we're moving the body upwards
 		[HarmonyPatch(typeof(TrainCar), nameof(TrainCar.LoadExternalInteractables))]
 		class MoveS282ExternalInteractablesUp
@@ -98,7 +92,7 @@ namespace RearrangedS282
 					__instance.loadedExternalInteractables.gameObject.SetActive(true);
 				}
 			}
-		}
+		}*/
 
 		//Moves S282's interior up to match the body
 		//Needs to be a patch because LocoS282A_Interior(Clone) gets respawned every time you enter the cab
@@ -107,7 +101,7 @@ namespace RearrangedS282
 		{
 			static void Postfix(ref TrainCar __instance)
 			{
-				if (__instance.carType == TrainCarType.LocoSteamHeavy)
+				/*if (__instance.carType == TrainCarType.LocoSteamHeavy)
 				{
 					Transform interior = __instance.loadedInterior.transform;
 					interior.localPosition = new Vector3(0, 0.09f, 0);
@@ -166,7 +160,7 @@ namespace RearrangedS282
 					HingeJoint c_reverser_hinge = c_reverser.GetComponent<HingeJoint>();
 					c_reverser_hinge.autoConfigureConnectedAnchor = false;
 					c_reverser_hinge.connectedAnchor += new Vector3(0, 0.09f, 0);
-				}
+				}*/
 			}
 		}
 
@@ -186,135 +180,134 @@ namespace RearrangedS282
 				TrainCar locoTrainCar = loco.GetComponent<TrainCar>();
 				if (locoTrainCar is null || locoTrainCar.carType != TrainCarType.LocoSteamHeavy)
 				{//only continue if we're working with an S282
+					Main.Logger.Error("Tried to explode something that wasn't an S282");
 					return;
 				}
 				Main.Logger.Log("Exploding an S282");
 
-				Transform leftDrivers = loco.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism L");
-				Transform rightDrivers = loco.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism R");
-				Transform fifthLeftDriveWheel = leftDrivers.Find("s282_wheels_driving_5");
-				Transform fifthRightDriveWheel = rightDrivers.Find("s282_wheels_driving_5");
-				Transform explodedBody = loco.Find("LocoS282AExploded_Body(Clone)");
-				Transform leftExplodedDrivers = explodedBody.Find("MovingParts_LOD0/DriveMechanism L");
-				Transform rightExplodedDrivers = explodedBody.Find("MovingParts_LOD0/DriveMechanism R");
-				Transform fifthLeftExplodedDriveWheel = leftExplodedDrivers.Find("s282_wheels_driving_5");
+				//copy unexplodedMovingParts over
+				Transform unexplodedMovingParts = loco.Find("LocoS282A_Body/MovingParts_LOD0");
+				Transform oldExplodedMovingParts = loco.Find("LocoS282AExploded_Body(Clone)/MovingParts_LOD0");
+				oldExplodedMovingParts.gameObject.SetActive(false);
+				Transform newMovingParts = UnityEngine.Object.Instantiate(unexplodedMovingParts.gameObject, oldExplodedMovingParts.parent).transform;
 
-				if (fifthLeftDriveWheel is not null && fifthLeftDriveWheel.gameObject.activeSelf)
-				{//if the fifth drive axle was actually being used
-					Main.Logger.Log("Exploding a 10-coupled S282");
+				//get exploded material. Doesn't matter from what part, they all have the same texture
+				var explodedMaterial = oldExplodedMovingParts
+					.Find("DriveMechanism L/s282_wheels_driving_1")
+					.GetComponent<MeshRenderer>()
+					.material;
 
-					if (fifthLeftExplodedDriveWheel is null)
-					{   //We haven't spawned the exploded fifth drive wheels yet, so create them
-						Main.Logger.Log("Exploding a 10-coupled S282 that hasn't been exploded before");
-
-						GameObject fourthLeftExplodedDriver = leftExplodedDrivers.Find("s282_wheels_driving_4").gameObject;
-						GameObject fourthRightExplodedDriver = rightExplodedDrivers.Find("s282_wheels_driving_4").gameObject;
-						GameObject leftExplodedSideRod = leftExplodedDrivers.Find("s282_mech_wheels_connect").gameObject;
-						GameObject rightExplodedSideRod = rightExplodedDrivers.Find("s282_mech_wheels_connect").gameObject;
-						Transform leftExtraSideRod = leftDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-						Transform rightExtraSideRod = rightDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-
-						//clone exploded drivers for fifth drive axle
-						GameObject fifthLeftExplodedDriver = UnityEngine.Object.Instantiate(
-							fourthLeftExplodedDriver,
-							fifthLeftDriveWheel.position,
-							fourthLeftExplodedDriver.transform.rotation,
-							leftExplodedDrivers);
-						GameObject fifthRightExplodedDriver = UnityEngine.Object.Instantiate(
-							fourthRightExplodedDriver,
-							fifthRightDriveWheel.position,
-							fourthRightExplodedDriver.transform.rotation,
-							rightExplodedDrivers);
-						fifthLeftExplodedDriver.name = "s282_wheels_driving_5";
-						fifthRightExplodedDriver.name = "s282_wheels_driving_5";
-						//hide LODs
-						fifthLeftExplodedDriver.transform.GetChild(0).gameObject.SetActive(false);
-						fifthRightExplodedDriver.transform.GetChild(0).gameObject.SetActive(false);
-
-						//clone siderods
-						GameObject newLeftSideRod = UnityEngine.Object.Instantiate(
-							leftExplodedSideRod,
-							leftExplodedSideRod.transform);
-						GameObject newRightSideRod = UnityEngine.Object.Instantiate(
-							rightExplodedSideRod,
-							rightExplodedSideRod.transform);
-						newLeftSideRod.transform.localPosition = new Vector3(0.003f, 0.004f, -3.1f);
-						newRightSideRod.transform.localPosition = new Vector3(0.003f, 0.004f, -3.1f);
-						newLeftSideRod.transform.localEulerAngles = leftExtraSideRod.localEulerAngles;
-						newRightSideRod.transform.localEulerAngles = rightExtraSideRod.localEulerAngles;
-						//hide LODs
-						newLeftSideRod.transform.GetChild(0).gameObject.SetActive(false);
-						newRightSideRod.transform.GetChild(0).gameObject.SetActive(false);
-
-						//get rid of all the extra valve gear that we accidentally copied when cloning siderods
-						for (int i = 0; i < newLeftSideRod.transform.childCount; i++)
-						{
-							GameObject child = newLeftSideRod.transform.GetChild(i).gameObject;
-							//kill all the children except our favorite
-							if (!child.name.Equals("s282_mech_wheels_connect_LOD1"))
-							{
-								UnityEngine.Object.DestroyImmediate(child);
-								i--; //gotta offset i because we deleted an object
-							}
-						}
-						for (int i = 0; i < newRightSideRod.transform.childCount; i++)
-						{
-							GameObject child = newRightSideRod.transform.GetChild(i).gameObject;
-							//kill all the children except our favorite
-							if (!child.name.Equals("s282_mech_wheels_connect_LOD1"))
-							{
-								UnityEngine.Object.DestroyImmediate(child);
-								i--; //gotta offset i because we deleted an object
-							}
-						}
-					}
-					else
-					{   // if the fifth exploded drive wheels have been spawned already, we just need to show them.
-						//This would happen if we exploded a 10-coupled loco, then repaired it, then exploded it again.
-						Main.Logger.Log("Exploding a 10-coupled S282 that has been exploded before as a 10-coupled");
-
-						Transform fifthRightExplodedDriveWheel = rightExplodedDrivers.Find("s282_wheels_driving_5");
-						Transform extraLeftExplodedSideRod = leftExplodedDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-						Transform extraRightExplodedSideRod = rightExplodedDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-						fifthLeftExplodedDriveWheel.gameObject.SetActive(true);
-						fifthRightExplodedDriveWheel.gameObject.SetActive(true);
-						extraLeftExplodedSideRod.gameObject.SetActive(true);
-						extraRightExplodedSideRod.gameObject.SetActive(true);
-					}
-				}
-				else
+				//replace all textures in newMovingParts with exploded texture
+				//This code was heavily inspired by code from Skin Manager (https://github.com/derail-valley-modding/skin-manager)
+				foreach (var renderer in newMovingParts.GetComponentsInChildren<MeshRenderer>(true))
 				{
-					if (fifthLeftExplodedDriveWheel is not null)
-					{   //if we've exploded a 10-coupled locomotive, then repaired it, then made it an 8-coupled,
-						//we now need to hide the fifth exploded axle.
-						Main.Logger.Log("Exploding an 8-coupled S282 that has been exploded before as a 10-coupled");
+					if (renderer.material is null)
+						continue;
 
-						Transform fifthRightExplodedDriveWheel = rightExplodedDrivers.Find("s282_wheels_driving_5");
-						Transform extraLeftExplodedSideRod = leftExplodedDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-						Transform extraRightExplodedSideRod = rightExplodedDrivers.Find("s282_mech_wheels_connect/s282_mech_wheels_connect(Clone)");
-						fifthLeftExplodedDriveWheel.gameObject.SetActive(false);
-						fifthRightExplodedDriveWheel.gameObject.SetActive(false);
-						extraLeftExplodedSideRod.gameObject.SetActive(false);
-						extraRightExplodedSideRod.gameObject.SetActive(false);
-					}
-					//else, we exploded a 8-coupled locomotive that has always been an 8-coupled locomotive:
-					//no need to do anything because we've never spawned the fifth drive axle
+					//apply exploded material to renderer
+					renderer.material = explodedMaterial;
 				}
 
-				//show trailing axle support if we need to
-				Transform rearTrailingAxleSupport = loco.Find("LocoS282A_Body/Static_LOD0/s282_wheels_rear_support_1");
-				if (rearTrailingAxleSupport is not null)
+				//hide siderods if they were already hidden
+				Transform oldLeftSideRod = unexplodedMovingParts.Find("DriveMechanism L/s282_mech_wheels_connect");
+				Transform oldRightSideRod = unexplodedMovingParts.Find("DriveMechanism R/s282_mech_wheels_connect");
+				Transform newLeftSideRod = newMovingParts.Find("DriveMechanism L/s282_mech_wheels_connect");
+				Transform newRightSideRod = newMovingParts.Find("DriveMechanism R/s282_mech_wheels_connect");
+				newLeftSideRod.GetComponent<MeshRenderer>().enabled = oldLeftSideRod.GetComponent<MeshRenderer>().enabled;
+				newRightSideRod.GetComponent<MeshRenderer>().enabled = oldRightSideRod.GetComponent<MeshRenderer>().enabled;
+				newLeftSideRod.Find("s282_mech_wheels_connect_LOD1").gameObject.SetActive(false);
+				newRightSideRod.Find("s282_mech_wheels_connect_LOD1").gameObject.SetActive(false);
+
+				//hide some LODs to get rid of z-fighting on the drivers
+				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(false);
+				loco.Find("Axle_R/bogie_car/[axle] 1/axleR_modelLOD1").gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_1").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_2").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_3").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_5").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_6").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_1").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_2").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_3").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_4").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_5").GetChild(0).gameObject.SetActive(false);
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_6").GetChild(0).gameObject.SetActive(false);
+
+				//rotate 5th and 6th drive wheels to be in the right position
+				Vector3 l4rotate = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").transform.localEulerAngles;
+				Vector3 r4rotate = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").transform.localEulerAngles;
+
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_5").transform.localEulerAngles = l4rotate;
+				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_6").transform.localEulerAngles = l4rotate;
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_5").transform.localEulerAngles = r4rotate;
+				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_6").transform.localEulerAngles = r4rotate;
+
+				UnityEngine.Object.Instantiate(loco.Find("LocoS282A_Body/Static_LOD0/s282_wheels_front_support_2").gameObject, loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/"));
+				UnityEngine.Object.Instantiate(loco.Find("LocoS282A_Body/Static_LOD0/s282_wheels_rear_support_1").gameObject, loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/"));
+
+				loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/s282_brake_shoes").gameObject.SetActive(false);
+
+				//replace main loco mesh
+				MeshFilter filter = loco.transform
+				.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/s282_locomotive_body")
+				.GetComponent<MeshFilter>();
+				if (filter is null)
 				{
-					Transform explodedFrontAxleSupport = explodedBody.Find("Static_LOD0/s282_wheels_front_support");
-
-					GameObject explodedTrailingAxleSupport = UnityEngine.Object.Instantiate(
-						explodedFrontAxleSupport.gameObject,
-						rearTrailingAxleSupport.position,
-						rearTrailingAxleSupport.rotation,
-						explodedFrontAxleSupport.parent
-					);
-					explodedTrailingAxleSupport.transform.localScale = rearTrailingAxleSupport.localScale;
+					Main.Logger.Warning("MeshFilter was null on an exploded S282");
+					return;
 				}
+				Mesh mesh = filter.sharedMesh;
+				if (mesh is null)
+				{
+					Main.Logger.Warning("Mesh was null on an exploded S282");
+					return;
+				}
+				Mesh newS282Mesh = UnityEngine.Object.Instantiate(MeshFinder.Instance.S282Mesh);
+				//for some reason the OBJloader flips the mesh left to right, so we have to flip it back
+				filter.transform.localScale = new Vector3(-1, 1, 1);
+				newS282Mesh.UploadMeshData(true);
+				filter.sharedMesh = newS282Mesh;
+				Main.Logger.Log("Loaded new exploded S282 mesh");
+
+				//make exploded drivetrain rotate
+				/*if (Main.settings.explodedDrivetrainRotate)
+				{
+					var drivetrainRotater = loco.Find("[wheel rotation]")
+					.GetComponent<PoweredWheelRotationViaAnimation>();
+					Animator leftAnimation = newMovingParts.Find("DriveMechanism L")
+						.GetComponent<Animator>();
+					Animator rightAnimation = newMovingParts.Find("DriveMechanism R")
+						.GetComponent<Animator>();
+					PoweredWheelRotationViaAnimation.AnimatorStartTimeOffsetPair leftAnimationOffset = new()
+					{
+						animator = leftAnimation,
+						startTimeOffset = 0
+					};
+					PoweredWheelRotationViaAnimation.AnimatorStartTimeOffsetPair rightAnimationOffset = new()
+					{
+						animator = rightAnimation,
+						startTimeOffset = 0.75f
+					};
+					drivetrainRotater.animatorSetups.AddItem(leftAnimationOffset);
+					drivetrainRotater.animatorSetups.AddItem(rightAnimationOffset);
+				}*/
+				
+			}
+		}
+
+		[HarmonyPatch(typeof(ExplosionModelHandler), nameof(ExplosionModelHandler.RevertToUnexplodedModel))]
+		class DeexplodeLocomotive
+		{
+			static void Postfix(ref ExplosionModelHandler __instance)
+			{
+				Transform loco = __instance.transform;
+				var wheelRearranger = loco.GetComponent<WheelRearranger>();
+				wheelRearranger.SwitchWheelArrangement((int) wheelRearranger.currentWA);
+				//We hid these LODs earlier, but now they're useful again
+				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(true);
+				loco.Find("Axle_R/bogie_car/[axle] 1/axleR_modelLOD1").gameObject.SetActive(true);
+				UnityEngine.Object.Destroy(loco.Find("LocoS282AExploded_Body(Clone)/MovingParts_LOD0(Clone)").gameObject);
 			}
 		}
 	}

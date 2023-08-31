@@ -19,6 +19,7 @@ namespace RearrangedS282
 			Harmony harmony = null;
 
 			settings = Settings.Load<Settings>(modEntry);
+			settings.OnChange();
 			modEntry.OnGUI = OnGUI;
 			modEntry.OnSaveGUI = OnSaveGUI;
 
@@ -46,6 +47,9 @@ namespace RearrangedS282
 		static void OnGUI(UnityModManager.ModEntry modEntry)
 		{
 			settings.Draw(modEntry);
+			//GUILayout.BeginVertical();
+			//settings.spawnRandomWA = GUILayout.Toggle(settings.spawnRandomWA, "Spawn S282 with random wheel arrangement");
+
 		}
 
 		static void OnSaveGUI(UnityModManager.ModEntry modEntry)
