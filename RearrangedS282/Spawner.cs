@@ -221,31 +221,48 @@ namespace RearrangedS282
 				//hide some LODs to get rid of z-fighting on the drivers
 				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(false);
 				loco.Find("Axle_R/bogie_car/[axle] 1/axleR_modelLOD1").gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_1").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_2").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_3").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_5").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_6").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_1").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_2").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_3").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_4").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_5").GetChild(0).gameObject.SetActive(false);
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_6").GetChild(0).gameObject.SetActive(false);
+
+				Transform firstLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_1");
+				Transform secondLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_2");
+				Transform thirdLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_3");
+				Transform fourthLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4");
+				Transform fifthLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_5");
+				Transform sixthLeftDriveWheel = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_6");
+				Transform firstRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_1");
+				Transform secondRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_2");
+				Transform thirdRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_3");
+				Transform fourthRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_4");
+				Transform fifthRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_5");
+				Transform sixthRightDriveWheel = newMovingParts.Find("DriveMechanism R/s282_wheels_driving_6");
+
+				//Hide more LODs
+				firstLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				secondLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				thirdLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				fourthLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				fifthLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				sixthLeftDriveWheel.GetChild(0).gameObject.SetActive(false);
+				firstRightDriveWheel.GetChild(0).gameObject.SetActive(false);
+				secondRightDriveWheel.GetChild(0).gameObject.SetActive(false);
+				thirdRightDriveWheel.GetChild(0).gameObject.SetActive(false);
+				fourthRightDriveWheel.GetChild(0).gameObject.SetActive(false);
+				fifthRightDriveWheel.GetChild(0).gameObject.SetActive(false);
+				sixthRightDriveWheel.GetChild(0).gameObject.SetActive(false);
 
 				//rotate 5th and 6th drive wheels to be in the right position
-				Vector3 l4rotate = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").transform.localEulerAngles;
-				Vector3 r4rotate = newMovingParts.Find("DriveMechanism L/s282_wheels_driving_4").transform.localEulerAngles;
+				fifthLeftDriveWheel.gameObject.GetComponent<PoweredWheelRotater>().Init(fourthLeftDriveWheel.gameObject);
+				fifthRightDriveWheel.gameObject.GetComponent<PoweredWheelRotater>().Init(fourthRightDriveWheel.gameObject);
+				sixthLeftDriveWheel.gameObject.GetComponent<PoweredWheelRotater>().Init(fourthLeftDriveWheel.gameObject);
+				sixthRightDriveWheel.gameObject.GetComponent<PoweredWheelRotater>().Init(fourthRightDriveWheel.gameObject);
 
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_5").transform.localEulerAngles = l4rotate;
-				newMovingParts.Find("DriveMechanism L/s282_wheels_driving_6").transform.localEulerAngles = l4rotate;
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_5").transform.localEulerAngles = r4rotate;
-				newMovingParts.Find("DriveMechanism R/s282_wheels_driving_6").transform.localEulerAngles = r4rotate;
+				//offset the right side drivetrain
+				loco.Find("[wheel rotation]").GetComponent<PoweredWheelRotationViaAnimation>().animatorSetups[0].startTimeOffset = 0.75f;
 
+				//copy axle supports over
 				UnityEngine.Object.Instantiate(loco.Find("LocoS282A_Body/Static_LOD0/s282_wheels_front_support_2").gameObject, loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/"));
 				UnityEngine.Object.Instantiate(loco.Find("LocoS282A_Body/Static_LOD0/s282_wheels_rear_support_1").gameObject, loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/"));
 
+				//hide the vanilla brake shoes, since we've made our own
 				loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/s282_brake_shoes").gameObject.SetActive(false);
 
 				//replace main loco mesh
