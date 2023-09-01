@@ -28,7 +28,7 @@ It can convert the S282 into any of these:
 - 4-10-2 Southern Pacific
 - 4-10-4
 - 0-12-0 Twelve-wheel switcher
-- 2-12-0 Centipede
+- 2-12-0
 - 2-12-2
 - 4-12-2 Union Pacific
 

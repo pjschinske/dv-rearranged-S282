@@ -126,7 +126,9 @@ namespace RearrangedS282
 			secondRearAxleSupport,
 			thirdRearAxle;
 
-		Mesh flangedDriver, blindDriver;
+		Mesh flangedDriver, blindDriver, blindDriverBigWeight;
+
+		MeshFilter s282MeshFilter;
 
 		private bool skipWheelArrangementChange = false;
 
@@ -138,6 +140,9 @@ namespace RearrangedS282
 		void Start()
 		{
 			loco = GetComponent<TrainCar>();
+			s282MeshFilter = transform
+				.Find("LocoS282A_Body/Static_LOD0/s282_locomotive_body")
+				.GetComponent<MeshFilter>();
 			if (loco == null )
 			{
 				Main.Logger.Error("WheelRearranger initialized on something that isn't a train car");
@@ -318,6 +323,7 @@ namespace RearrangedS282
 
 			flangedDriver = firstRightDriveWheel.GetComponent<MeshFilter>().sharedMesh;
 			blindDriver = secondRightDriveWheel.GetComponent<MeshFilter>().sharedMesh;
+			blindDriverBigWeight = thirdRightDriveWheel.GetComponent<MeshFilter>().sharedMesh;
 
 			//duplicate side rods and extend the copies to the fifth axle
 			leftSideRod = loco.transform.Find("LocoS282A_Body/MovingParts_LOD0/DriveMechanism L/s282_mech_wheels_connect");
@@ -723,10 +729,12 @@ namespace RearrangedS282
 				return;
 			skipWheelArrangementChange = true;
 
+			WheelArrangementType oldWA = currentWA;
+
 			WheelArrangementType waType = (WheelArrangementType)wa;
 			currentWA = waType;
 
-			Main.Logger.Log($"Switching an S282 to {waType.ToString()}");
+			Main.Logger.Log($"Switching an S282 from {oldWA} to {waType}");
 
 			HideLeadingWheels();
 			RemoveFifthAndSixthDriveAxle();
@@ -739,8 +747,9 @@ namespace RearrangedS282
 			{
 				case WheelArrangementType.s280:
 				case WheelArrangementType.s282:
-				case WheelArrangementType.s282Big:
 				case WheelArrangementType.s284:
+				case WheelArrangementType.s280Big:
+				case WheelArrangementType.s282Big:
 				case WheelArrangementType.s2100:
 				case WheelArrangementType.s2102:
 				case WheelArrangementType.s2104:
@@ -759,6 +768,7 @@ namespace RearrangedS282
 				case WheelArrangementType.s444:
 				case WheelArrangementType.s460:
 				case WheelArrangementType.s462:
+				case WheelArrangementType.s464:
 				case WheelArrangementType.s480:
 				case WheelArrangementType.s482:
 				case WheelArrangementType.s484:
@@ -778,8 +788,10 @@ namespace RearrangedS282
 					break;
 				case WheelArrangementType.s460:
 				case WheelArrangementType.s462:
+				case WheelArrangementType.s464:
 					Show6Drivers();
 					break;
+				case WheelArrangementType.s280Big:
 				case WheelArrangementType.s282Big:
 					Show8BigDrivers();
 					break;
@@ -912,6 +924,7 @@ namespace RearrangedS282
 				case WheelArrangementType.s284:
 					ShowFourTrailingWheels();
 					break;
+				case WheelArrangementType.s464:
 				case WheelArrangementType.s484:
 				case WheelArrangementType.s0104:
 				case WheelArrangementType.s2104:
@@ -1028,6 +1041,7 @@ namespace RearrangedS282
 
 		private void RemoveFifthAndSixthDriveAxle()
 		{
+			s282MeshFilter.sharedMesh = MeshFinder.Instance.S282Mesh;
 			//move rear bogie back to stock position
 			//MoveRearBogieTo(3.2f, true);
 
@@ -1097,8 +1111,8 @@ namespace RearrangedS282
 
 			MeshFilter thirdLeftMeshFilter = thirdLeftDriveWheel.GetComponent<MeshFilter>();
 			MeshFilter thirdRightMeshFilter = thirdRightDriveWheel.GetComponent<MeshFilter>();
-			thirdLeftMeshFilter.mesh = blindDriver;
-			thirdRightMeshFilter.mesh = blindDriver;
+			thirdLeftMeshFilter.mesh = blindDriverBigWeight;
+			thirdRightMeshFilter.mesh = blindDriverBigWeight;
 
 			//Main.Logger.Log("reset blind drivers");
 
@@ -1380,6 +1394,8 @@ namespace RearrangedS282
 
 		private void Show4Drivers()
 		{
+			s282MeshFilter.sharedMesh = MeshFinder.Instance.FourAndSixCoupledMesh;
+
 			//MoveRearBogieTo(2.86f, false);
 
 			driveL.localPosition = new Vector3(0, 0, -3.935f);
@@ -1453,6 +1469,8 @@ namespace RearrangedS282
 
 		private void Show6Drivers()
 		{
+			s282MeshFilter.sharedMesh = MeshFinder.Instance.FourAndSixCoupledMesh;
+
 			//MoveRearBogieTo(2.03f, false);
 
 			driveL.localPosition = new Vector3(0, 0, -2.1f);
@@ -1554,6 +1572,8 @@ namespace RearrangedS282
 		//embiggens drivers for the high-speed 2-8-2
 		private void Show8BigDrivers()
 		{
+			s282MeshFilter.sharedMesh = MeshFinder.Instance.FourAndSixCoupledMesh;
+
 			driveL.localPosition = new Vector3(0, 0, -1.5f);
 			driveR.localPosition = new Vector3(0, 0, -1.5f);
 			driveL.localScale = new Vector3(-1, 1.198f, 1.198f);

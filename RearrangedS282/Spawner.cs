@@ -65,7 +65,7 @@ namespace RearrangedS282
 				if (__instance is not null
 					&& __instance.carType == TrainCarType.LocoSteamHeavy)
 				{
-					fixS282ClippingThroughRail(ref __instance);
+					//fixS282ClippingThroughRail(ref __instance);
 
 					__instance.gameObject.AddComponent<WheelRearranger>();
 				}

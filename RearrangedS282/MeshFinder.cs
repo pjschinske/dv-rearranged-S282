@@ -29,6 +29,9 @@ namespace RearrangedS282
 		
 		public Mesh S282Mesh
 		{ get; private set; }
+		public Mesh FourAndSixCoupledMesh
+		{ get; private set; }
+
 		public Mesh BrakeCaliperMesh
 		{ get; private set; }
 		public Mesh BrakeShoeMesh
@@ -155,6 +158,21 @@ namespace RearrangedS282
 		private static readonly RangeFloat brakeCaliperSandLimitY2a = new RangeFloat(0.26f, .66f);
 		private static readonly RangeFloat brakeCaliperSandLimitZ2a = new RangeFloat(1.87f, 2.3f);
 
+		//limits of part of bracket that clips with 4-coupled and 6-coupled
+		private static readonly RangeFloat bracketLimitX = new RangeFloat(-1.17f, - 0.2f);
+		private static readonly RangeFloat bracketLimitX2 = new RangeFloat(0.2f, 1.17f);
+		private static readonly RangeFloat bracketLimitY = new RangeFloat(1.44f, 1.57f);
+		private static readonly RangeFloat bracketLimitZ = new RangeFloat(0.61f, 0.69f);
+
+		private static readonly RangeFloat bracket2LimitX = new RangeFloat(-1.28f, -0.98f);
+		private static readonly RangeFloat bracket2LimitX2 = new RangeFloat(0.98f, 1.28f);
+		private static readonly RangeFloat bracket2LimitY = new RangeFloat(1.4f, 1.7f);
+		private static readonly RangeFloat bracket2LimitZ = new RangeFloat(0.61f, 2.24f);
+
+		private static readonly RangeFloat bracket3LimitX = new RangeFloat(-0.99f, -0.2f);
+		private static readonly RangeFloat bracket3LimitX2 = new RangeFloat(0.2f, 0.99f);
+		private static readonly RangeFloat bracket3LimitY = new RangeFloat(1.62f, 1.7f);
+		private static readonly RangeFloat bracket3LimitZ = new RangeFloat(1.77f, 1.85f);
 
 		//moving some siderod verticies to make wheel spacing even on 10-coupled and 12-coupled engines
 		private static readonly Range[] verticesToMoveBackward =
@@ -331,6 +349,20 @@ namespace RearrangedS282
 			S282Mesh.RecalculateNormals();
 			S282Mesh.RecalculateTangents();
 			S282Mesh.RecalculateBounds();
+
+
+
+			FourAndSixCoupledMesh = UnityEngine.Object.Instantiate(S282Mesh);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracketLimitX, bracketLimitY, bracketLimitZ);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracketLimitX2, bracketLimitY, bracketLimitZ);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracket2LimitX, bracket2LimitY, bracket2LimitZ);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracket2LimitX2, bracket2LimitY, bracket2LimitZ);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracket3LimitX, bracket3LimitY, bracket3LimitZ);
+			hidePartOfMesh(FourAndSixCoupledMesh, bracket3LimitX2, bracket3LimitY, bracket3LimitZ);
+
+			FourAndSixCoupledMesh.RecalculateNormals();
+			FourAndSixCoupledMesh.RecalculateTangents();
+			FourAndSixCoupledMesh.RecalculateBounds();
 		}
 
 		private void getCaliperMesh()

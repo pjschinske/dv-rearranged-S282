@@ -1,5 +1,5 @@
 # TODO
-- double check all exploded locomotives
+- make sure braking force is scaled correctly per axle
 
 ## Bugs
 - Error in log: "Mesh.vertices is too small. The supplied vertex array has less vertices than are referenced by the triangles array."
