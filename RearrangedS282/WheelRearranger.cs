@@ -14,6 +14,7 @@ using DV.ModularAudioCar;
 using DV.Simulation.Ports;
 using DV.Simulation.Cars;
 using DV.Logic.Job;
+using DV.Simulation.Brake;
 
 namespace RearrangedS282
 {
@@ -314,12 +315,12 @@ namespace RearrangedS282
 				driveAxle5.localPosition.x,
 				driveAxle5.localPosition.y,
 				3.25f);
-			driveAxle6 = Instantiate(driveAxle4.gameObject, rearBogie).transform;
+			driveAxle6 = Instantiate(driveAxle4.gameObject, frontBogie).transform;
 			driveAxle6.gameObject.name = "[axle] drive 3";
 			driveAxle6.localPosition = new Vector3(
 				driveAxle5.localPosition.x,
 				driveAxle5.localPosition.y,
-				4.75f); //TODO: GET THE RIGHT POSITION OF THE SIXTH DRIVE AXLE
+				-0.05f); //TODO: GET THE RIGHT POSITION OF THE SIXTH DRIVE AXLE
 
 			flangedDriver = firstRightDriveWheel.GetComponent<MeshFilter>().sharedMesh;
 			blindDriver = secondRightDriveWheel.GetComponent<MeshFilter>().sharedMesh;
@@ -515,6 +516,23 @@ namespace RearrangedS282
 			leftFifthBrakeShoe.gameObject.name = "brake shoe 5";
 			rightSixthBrakeShoe.gameObject.name = "brake shoe 6";
 			leftSixthBrakeShoe.gameObject.name = "brake shoe 6";
+
+			//Add brake shoes to BrakesOverheatingController to make them glow
+			BrakesOverheatingController brakesOverheatingController = GetComponent<BrakesOverheatingController>();
+			var brakeRenderers = brakesOverheatingController.brakeRenderers.ToList();
+			brakeRenderers.Add(rightFirstBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftFirstBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(rightSecondBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftSecondBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(rightThirdBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftThirdBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(rightFourthBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftFourthBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(rightFifthBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftFifthBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(rightSixthBrakeShoe.GetComponent<MeshRenderer>());
+			brakeRenderers.Add(leftSixthBrakeShoe.GetComponent<MeshRenderer>());
+			brakesOverheatingController.brakeRenderers = brakeRenderers.ToArray();
 
 			//Generate sparks for 5th and 6th drive axles.
 			//In locomotives with less drive axles, we hide the uneeded spark transforms.

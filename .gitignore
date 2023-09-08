@@ -1,3 +1,5 @@
+resources.assets/
+models/
 # Local reference configuration
 Directory.Build.targets
 
