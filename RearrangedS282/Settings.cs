@@ -34,11 +34,11 @@ namespace RearrangedS282
 		}
 
 		private const int HEIGHT = 12;
-		[Space(5)]
 
-		[Draw("Allow the S282's wheels to turn when destroyed:")] public bool explodedDrivetrainRotate = true;
+		/*[Draw("Allow the S282's wheels to turn when destroyed:")] public bool explodedDrivetrainRotate = true;*/
 
 		[Header("Reapply wheel arrangement to update")]
+		[Space(5)]
 		[Header("Trailing truck style")]
 		[Draw("4-4-2 trailing truck style:", DrawType.ToggleGroup)] public X82Options x42Options = X82Options.vanilla;
 		[Draw("4-6-2 trailing truck style:", DrawType.ToggleGroup)] public X102Options x62Options = X102Options.vanilla;
