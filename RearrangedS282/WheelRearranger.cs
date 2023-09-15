@@ -1145,6 +1145,7 @@ namespace RearrangedS282
 			setWheelRadius(0.71f);
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 4;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 4;
 
 			//Main.Logger.Log("Set poweredAxles to 4");
 
@@ -1437,6 +1438,7 @@ namespace RearrangedS282
 			setWheelRadius(1.03376f); // == 1.42*0.728 = 40.75in*2 = 81.5in
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 2;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 2;
 
 			leftReachRod.gameObject.SetActive(false);
 			rightReachRod.gameObject.SetActive(false);
@@ -1501,6 +1503,7 @@ namespace RearrangedS282
 			setWheelRadius(0.9144f); // == 1.3058*0.71 = 36.5in = 73in/2
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 3;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 3;
 
 			secondLeftDriveWheel.GetComponent<MeshFilter>().mesh = flangedDriver;
 			secondRightDriveWheel.GetComponent<MeshFilter>().mesh = flangedDriver;
@@ -1599,6 +1602,7 @@ namespace RearrangedS282
 			setWheelRadius(0.8509f); // == 1.198*0.71 = 42in = 73in/2
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 4;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 4;
 
 			leftReachRod.gameObject.SetActive(false);
 			rightReachRod.gameObject.SetActive(false);
@@ -1652,6 +1656,7 @@ namespace RearrangedS282
 			rightFiveAxleSideRod.gameObject.SetActive(true);
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 5;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 5;
 
 			MeshFilter fourthLeftMeshFilter = fourthLeftDriveWheel.GetComponent<MeshFilter>();
 			MeshFilter fourthRightMeshFilter = fourthRightDriveWheel.GetComponent<MeshFilter>();
@@ -1716,6 +1721,7 @@ namespace RearrangedS282
 			setWheelRadius(0.6096f); // == 0.8586*0.71 = 24in = 48in/2
 
 			loco.transform.Find("[sim]/poweredAxles").GetComponent<ConfigurablePortDefinition>().value = 6;
+			loco.transform.Find("[sim]/traction").GetComponent<WheelslipController>().numberOfPoweredAxlesPort.Value = 6;
 
 			MeshFilter secondLeftMeshFilter = secondLeftDriveWheel.GetComponent<MeshFilter>();
 			MeshFilter secondRightMeshFilter = secondRightDriveWheel.GetComponent<MeshFilter>();

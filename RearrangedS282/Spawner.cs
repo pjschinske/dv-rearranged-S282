@@ -12,7 +12,7 @@ using LocoSim.Implementations;
 using UnityEngine;
 using static Oculus.Avatar.CAPI;
 using DV.ModularAudioCar;
-using JetBrains.Annotations;
+using VLB;
 
 namespace RearrangedS282
 {
@@ -67,7 +67,7 @@ namespace RearrangedS282
 				{
 					//fixS282ClippingThroughRail(ref __instance);
 
-					__instance.gameObject.AddComponent<WheelRearranger>();
+					__instance.gameObject.GetOrAddComponent<WheelRearranger>();
 				}
 			}
 		}
@@ -319,7 +319,7 @@ namespace RearrangedS282
 			static void Postfix(ref ExplosionModelHandler __instance)
 			{
 				Transform loco = __instance.transform;
-				var wheelRearranger = loco.GetComponent<WheelRearranger>();
+				var wheelRearranger = loco.gameObject.GetOrAddComponent<WheelRearranger>();
 				wheelRearranger.SwitchWheelArrangement((int) wheelRearranger.currentWA);
 				//We hid these LODs earlier, but now they're useful again
 				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(true);
