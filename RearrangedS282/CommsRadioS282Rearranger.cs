@@ -11,6 +11,7 @@ using DV.ThingTypes.TransitionHelpers;
 using DV.Utils;
 using HarmonyLib;
 using UnityEngine;
+using VLB;
 
 namespace RearrangedS282
 {
@@ -368,7 +369,8 @@ namespace RearrangedS282
 			{
 				Main.Logger.Error("Tried to rearrange something that wasn't an S282");
 			}
-			SelectedCar.GetComponent<WheelRearranger>()
+
+			SelectedCar.GetOrAddComponent<WheelRearranger>()
 				.SwitchWheelArrangement(selectedWheelArrangement);
 		}
 

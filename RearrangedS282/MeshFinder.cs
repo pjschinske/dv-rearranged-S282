@@ -1,4 +1,5 @@
 using Dummiesman;
+using MeshXtensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,19 @@ namespace RearrangedS282
 		{ get; private set; }
 		public Mesh FourAndSixCoupledMesh
 		{ get; private set; }
+		public Mesh DuplexMesh
+		{ get; private set; }
 
+		/*public Mesh DryPipeMesh
+		{ get; private set; }
+		public Mesh IntakeManifoldFMesh
+		{ get; private set; }
+		public Mesh IntakeManifoldRMesh
+		{ get; private set; }
+		public Mesh CylinderMesh
+		{ get; private set; }*/
+		public Mesh CrossheadBracketMesh
+		{ get; private set; }
 		public Mesh BrakeCaliperMesh
 		{ get; private set; }
 		public Mesh BrakeShoeMesh
@@ -44,6 +57,27 @@ namespace RearrangedS282
 		{ get; private set; }
 		public Mesh FiveSixAxleSideRodMesh
 		{ get; private set; }
+		public Mesh TwoAxleDuplexSideRodMesh
+		{ get; private set; }
+
+		/*//Franklin valve gear meshes
+		public Mesh TransmissionBoxMesh
+		{ get; private set; }
+		public Mesh UJointMesh
+		{ get; private set; }
+		public Mesh DriveshaftRMesh
+		{ get; private set; }
+		public Mesh DriveshaftMMesh
+		{ get; private set; }
+		public Mesh DriveshaftFMesh
+		{ get; private set; }
+		public Mesh TransmissionBoxMountShaftMesh
+		{ get; private set; }
+		public Mesh DriveshaftMMountMesh
+		{ get; private set; }
+		public Mesh DriveshaftMMountShaftMesh
+		{ get; private set; }*/
+
 
 		//public GameObject S282Obj
 		//{ get; private set; }
@@ -62,6 +96,11 @@ namespace RearrangedS282
 			{
 				return x >= start && x < end;
 			}
+
+			public override string ToString()
+			{
+				return $"{base.ToString()}: start={start}, end={end}";
+			}
 		}
 
 		struct RangeFloat
@@ -77,6 +116,11 @@ namespace RearrangedS282
 			public bool contains(float x)
 			{
 				return x >= start && x <= end;
+			}
+
+			public override string ToString()
+			{
+				return $"{base.ToString()}: start={start}, end={end}";
 			}
 		}
 
@@ -144,35 +188,65 @@ namespace RearrangedS282
 		};
 
 		//brake caliper limits:
-		private static readonly RangeFloat brakeCaliperLimitX = new RangeFloat(-.81f, -.31f);
-		private static readonly RangeFloat brakeCaliperLimitY = new RangeFloat(0, .66f);
-		private static readonly RangeFloat brakeCaliperLimitZ = new RangeFloat(.31f, .74f);
-		private static readonly RangeFloat brakeCaliperSandLimitX = new RangeFloat(-.81f, -.31f);
-		private static readonly RangeFloat brakeCaliperSandLimitY = new RangeFloat(0, .66f);
-		private static readonly RangeFloat brakeCaliperSandLimitZ = new RangeFloat(3.56f, 4);
+		private static readonly RangeFloat brakeCaliperLimitX = new(-.81f, -.31f);
+		private static readonly RangeFloat brakeCaliperLimitY = new(0, .66f);
+		private static readonly RangeFloat brakeCaliperLimitZ = new(.31f, .74f);
+		private static readonly RangeFloat brakeCaliperSandLimitX = new(-.81f, -.31f);
+		private static readonly RangeFloat brakeCaliperSandLimitY = new(0, .66f);
+		private static readonly RangeFloat brakeCaliperSandLimitZ = new(3.56f, 4);
 
 		//other brake caliper limits, this is just to know what to hide
-		private static readonly RangeFloat brakeCaliperLimitXLeft = new RangeFloat(.31f, .81f);
-		private static readonly RangeFloat brakeCaliperLimitZ4 = new RangeFloat(-1.24f, -.81f);
-		private static readonly RangeFloat brakeCaliperSandLimitZ2 = new RangeFloat(1.87f, 2.22f);
-		private static readonly RangeFloat brakeCaliperSandLimitY2a = new RangeFloat(0.26f, .66f);
-		private static readonly RangeFloat brakeCaliperSandLimitZ2a = new RangeFloat(1.87f, 2.3f);
+		private static readonly RangeFloat brakeCaliperLimitXLeft = new(.31f, .81f);
+		private static readonly RangeFloat brakeCaliperLimitZ4 = new(-1.24f, -.81f);
+		private static readonly RangeFloat brakeCaliperSandLimitZ2 = new(1.87f, 2.22f);
+		private static readonly RangeFloat brakeCaliperSandLimitY2a = new(0.26f, .66f);
+		private static readonly RangeFloat brakeCaliperSandLimitZ2a = new(1.87f, 2.3f);
 
 		//limits of part of bracket that clips with 4-coupled and 6-coupled
-		private static readonly RangeFloat bracketLimitX = new RangeFloat(-1.17f, - 0.2f);
-		private static readonly RangeFloat bracketLimitX2 = new RangeFloat(0.2f, 1.17f);
-		private static readonly RangeFloat bracketLimitY = new RangeFloat(1.44f, 1.57f);
-		private static readonly RangeFloat bracketLimitZ = new RangeFloat(0.61f, 0.69f);
+		private static readonly RangeFloat bracketLimitX = new(-1.17f, - 0.2f);
+		private static readonly RangeFloat bracketLimitX2 = new(0.2f, 1.17f);
+		private static readonly RangeFloat bracketLimitY = new(1.44f, 1.57f);
+		private static readonly RangeFloat bracketLimitZ = new(0.61f, 0.69f);
 
-		private static readonly RangeFloat bracket2LimitX = new RangeFloat(-1.28f, -0.98f);
-		private static readonly RangeFloat bracket2LimitX2 = new RangeFloat(0.98f, 1.28f);
-		private static readonly RangeFloat bracket2LimitY = new RangeFloat(1.4f, 1.7f);
-		private static readonly RangeFloat bracket2LimitZ = new RangeFloat(0.61f, 2.24f);
+		private static readonly RangeFloat bracket2LimitX = new(-1.28f, -0.98f);
+		private static readonly RangeFloat bracket2LimitX2 = new(0.98f, 1.28f);
+		private static readonly RangeFloat bracket2LimitY = new(1.4f, 1.7f);
+		private static readonly RangeFloat bracket2LimitZ = new(0.61f, 2.24f);
 
-		private static readonly RangeFloat bracket3LimitX = new RangeFloat(-0.99f, -0.2f);
-		private static readonly RangeFloat bracket3LimitX2 = new RangeFloat(0.2f, 0.99f);
-		private static readonly RangeFloat bracket3LimitY = new RangeFloat(1.62f, 1.7f);
-		private static readonly RangeFloat bracket3LimitZ = new RangeFloat(1.77f, 1.85f);
+		private static readonly RangeFloat bracket3LimitX = new(-0.99f, -0.2f);
+		private static readonly RangeFloat bracket3LimitX2 = new(0.2f, 0.99f);
+		private static readonly RangeFloat bracket3LimitY = new(1.62f, 1.7f);
+		private static readonly RangeFloat bracket3LimitZ = new(1.77f, 1.85f);
+
+		//4, 5, and 6 are the vertical part of the bracket
+		private static readonly RangeFloat bracket4LimitX = new(-1.35f, -0.134f);
+		private static readonly RangeFloat bracket4LimitX2 = new(0.134f, 1.35f);
+		private static readonly RangeFloat bracket4LimitY = new(1.09f, 1.59f);
+		private static readonly RangeFloat bracket4LimitZ = new(2.22f, 2.34f);
+
+		private static readonly RangeFloat bracket5LimitX = new(-1.35f, -1.03f);
+		private static readonly RangeFloat bracket5LimitX2 = new(1.03f, 1.35f);
+		private static readonly RangeFloat bracket5LimitY = new(0.11f, 1.59f);
+		private static readonly RangeFloat bracket5LimitZ = new(2.22f, 2.34f);
+
+		private static readonly RangeFloat bracket6LimitX = new(-1.1f, 1.1f);
+		private static readonly RangeFloat bracket6LimitY = new(0.1f, 0.3f);
+		private static readonly RangeFloat bracket6LimitZ = new(2.22f, 2.34f);
+
+		private static readonly RangeFloat crossheadGuideLimitX = new(-1.11f, -1.07f);
+		private static readonly RangeFloat crossheadGuideLimitX2 = new(1.07f, 1.11f);
+		private static readonly RangeFloat crossheadGuideLimitY = new(0.39f, 1.03f);
+		private static readonly RangeFloat crossheadGuideLimitZ = new(2.19f, 4.04f);
+
+		private static readonly RangeFloat cylinderLimitX = new(-1.5f, -0.74f);
+		private static readonly RangeFloat cylinderLimitX2 = new(0.74f, 1.5f);
+		private static readonly RangeFloat cylinderLimitY = new(0, 1.7f);
+		private static readonly RangeFloat cylinderLimitZ = new(4.15f, 5.35f);
+
+		private static readonly RangeFloat cylinder2LimitX = new(-1.5f, -0.74f);
+		private static readonly RangeFloat cylinder2LimitX2 = new(0.74f, 1.5f);
+		private static readonly RangeFloat cylinder2LimitY = new(0, 1.63f);
+		private static readonly RangeFloat cylinder2LimitZ = new(3.92f, 4.18f);
 
 		//moving some siderod verticies to make wheel spacing even on 10-coupled and 12-coupled engines
 		private static readonly Range[] verticesToMoveBackward =
@@ -259,17 +333,82 @@ namespace RearrangedS282
 			Main.Logger.Log(process.StandardOutput.ReadToEnd());
 
 			getBodyMesh();
+			/*getDryPipeMesh();
+			getIntakeManifoldFMesh();
+			getIntakeManifoldRMesh();*/
 			getCaliperMesh();
 			getCaliperSandMesh();
 			getBrakeShoeMesh();
 			getSideRodMeshes();
+			/*getFranklinValveGearMeshes();*/
+
+			S282Mesh.RecalculateNormals();
+			S282Mesh.RecalculateTangents();
+			S282Mesh.RecalculateBounds();
+			/*CylinderMesh.RecalculateNormals();
+			CylinderMesh.RecalculateTangents();
+			CylinderMesh.RecalculateBounds();*/
+			FourAndSixCoupledMesh.RecalculateNormals();
+			FourAndSixCoupledMesh.RecalculateTangents();
+			FourAndSixCoupledMesh.RecalculateBounds();
+			DuplexMesh.RecalculateNormals();
+			DuplexMesh.RecalculateTangents();
+			DuplexMesh.RecalculateBounds();
+			BrakeCaliperMesh.RecalculateNormals();
+			BrakeCaliperMesh.RecalculateTangents();
+			BrakeCaliperMesh.RecalculateBounds();
+		}
+
+		//mark part of mesh, to be either kept or destroyed with deleteMarkedPartOfMesh or
+		//deleteUnmarkedPartOfMesh.
+		private void markPartOfMesh(Vector3[] vertices, int[] triangles, RangeFloat xRange, RangeFloat yRange, RangeFloat zRange)
+		{
+			//Main.Logger.Log(xRange.ToString());
+			//Main.Logger.Log(yRange.ToString());
+			//Main.Logger.Log(zRange.ToString());
+
+			vertices = (Vector3[])vertices.Clone();
+			//if the vertex is out of range, set it to zero
+			for (int i = 0; i < vertices.Length; i++)
+			{
+				if (xRange.contains(vertices[i].x)
+					&& yRange.contains(vertices[i].y)
+					&& zRange.contains(vertices[i].z))
+				{
+					vertices[i] = Vector3.zero;
+				}
+			}
+			//triangles that contain out-of-range vertices get marked
+			for (int i = 0; i < triangles.Length - 2; i += 3)
+			{
+				//Only set to negative 1 if it hasn't been already and all it's vertices have been set to zero
+				if (triangles[i] != -1
+					&& vertices[triangles[i]].Equals(Vector3.zero)
+					&& vertices[triangles[i + 1]].Equals(Vector3.zero)
+					&& vertices[triangles[i + 2]].Equals(Vector3.zero))
+				{
+					triangles[i] = -1;
+					triangles[i + 1] = -1;
+					triangles[i + 2] = -1;
+				}
+			}
+		}
+
+		private void deleteMarkedPartOfMesh(Mesh mesh, int[] markedTriangles)
+		{
+			mesh.triangles = markedTriangles.Where((source, index) => source != -1).ToArray();
+		}
+
+		private void deleteUnmarkedPartOfMesh(Mesh mesh, int[] markedTriangles)
+		{
+			mesh.triangles = mesh.triangles.Where((source, index) => markedTriangles[index] == -1).ToArray();
 		}
 
 		//hide the part of a mesh enclosed in three ranges
 		private void hidePartOfMesh(Mesh mesh, RangeFloat xRange, RangeFloat yRange, RangeFloat zRange)
 		{
-			Vector3[] vertices = mesh.vertices;
-			int[] triangles = mesh.triangles;
+			Vector3[] vertices = (Vector3[])mesh.vertices.Clone();
+			int[] triangles = (int[])mesh.triangles.Clone();
 			//if the vertex is out of range, set it to zero
 			for (int i = 0; i < vertices.Length; i++)
 			{
@@ -292,8 +431,6 @@ namespace RearrangedS282
 					triangles[i + 2] = -1;
 				}
 			}
-			vertices = vertices.Where((source, index) => source != Vector3.zero).ToArray();
-			mesh.vertices = vertices;
 			triangles = triangles.Where((source, index) => source != -1).ToArray();
 			mesh.triangles = triangles;
 		}
@@ -345,12 +482,9 @@ namespace RearrangedS282
 			hidePartOfMesh(S282Mesh, brakeCaliperLimitXLeft, brakeCaliperLimitY, brakeCaliperSandLimitZ);
 			hidePartOfMesh(S282Mesh, brakeCaliperLimitXLeft, brakeCaliperLimitY, brakeCaliperSandLimitZ2);
 			hidePartOfMesh(S282Mesh, brakeCaliperLimitXLeft, brakeCaliperSandLimitY2a, brakeCaliperSandLimitZ2a);
-
-			S282Mesh.RecalculateNormals();
-			S282Mesh.RecalculateTangents();
-			S282Mesh.RecalculateBounds();
-
-
+			
+			/*getCylinderMesh();*/
+			getCrossheadBracketMesh();
 
 			FourAndSixCoupledMesh = UnityEngine.Object.Instantiate(S282Mesh);
 			hidePartOfMesh(FourAndSixCoupledMesh, bracketLimitX, bracketLimitY, bracketLimitZ);
@@ -359,11 +493,64 @@ namespace RearrangedS282
 			hidePartOfMesh(FourAndSixCoupledMesh, bracket2LimitX2, bracket2LimitY, bracket2LimitZ);
 			hidePartOfMesh(FourAndSixCoupledMesh, bracket3LimitX, bracket3LimitY, bracket3LimitZ);
 			hidePartOfMesh(FourAndSixCoupledMesh, bracket3LimitX2, bracket3LimitY, bracket3LimitZ);
+			
+			DuplexMesh = UnityEngine.Object.Instantiate(FourAndSixCoupledMesh);
+			hidePartOfMesh(DuplexMesh, bracket4LimitX, bracket4LimitY, bracket4LimitZ);
+			hidePartOfMesh(DuplexMesh, bracket4LimitX2, bracket4LimitY, bracket4LimitZ);
+			hidePartOfMesh(DuplexMesh, bracket5LimitX, bracket5LimitY, bracket5LimitZ);
+			hidePartOfMesh(DuplexMesh, bracket5LimitX2, bracket5LimitY, bracket5LimitZ);
+			hidePartOfMesh(DuplexMesh, bracket6LimitX, bracket6LimitY, bracket6LimitZ);
 
-			FourAndSixCoupledMesh.RecalculateNormals();
-			FourAndSixCoupledMesh.RecalculateTangents();
-			FourAndSixCoupledMesh.RecalculateBounds();
+			hidePartOfMesh(DuplexMesh, crossheadGuideLimitX, crossheadGuideLimitY, crossheadGuideLimitZ);
+			hidePartOfMesh(DuplexMesh, crossheadGuideLimitX2, crossheadGuideLimitY, crossheadGuideLimitZ);
+
+			//hide cylinders
+			int[] triangles = (int[])DuplexMesh.triangles.Clone();
+			markPartOfMesh(DuplexMesh.vertices, triangles, cylinderLimitX, cylinderLimitY, cylinderLimitZ);
+			markPartOfMesh(DuplexMesh.vertices, triangles, cylinderLimitX2, cylinderLimitY, cylinderLimitZ);
+			markPartOfMesh(DuplexMesh.vertices, triangles, cylinder2LimitX, cylinder2LimitY, cylinder2LimitZ);
+			markPartOfMesh(DuplexMesh.vertices, triangles, cylinder2LimitX2, cylinder2LimitY, cylinder2LimitZ);
+			deleteMarkedPartOfMesh(DuplexMesh, triangles);
 		}
+
+		/*//must be run after getBodyMesh()
+		private void getCylinderMesh()
+		{
+			*//*this.CylinderMesh = UnityEngine.Object.Instantiate(S282Mesh);
+			int[] triangles = (int[])CylinderMesh.triangles.Clone();
+			markPartOfMesh(CylinderMesh.vertices, triangles, cylinderLimitX, cylinderLimitY, cylinderLimitZ);
+			markPartOfMesh(CylinderMesh.vertices, triangles, cylinder2LimitX, cylinder2LimitY, cylinder2LimitZ);
+			deleteUnmarkedPartOfMesh(CylinderMesh, triangles);*//*
+			CylinderMesh = new OBJLoader().Load(exportPathFull + "\\cylinder.obj");
+		}*/
+
+		private void getCrossheadBracketMesh()
+		{
+			this.CrossheadBracketMesh = UnityEngine.Object.Instantiate(S282Mesh);
+			int[] triangles = (int[])CrossheadBracketMesh.triangles.Clone();
+			//markPartOfMesh(CrossheadBracketMesh.vertices, triangles, bracket2LimitX, bracket2LimitY, bracket2LimitZ);
+			//markPartOfMesh(CrossheadBracketMesh.vertices, triangles, bracket3LimitX, bracket3LimitY, bracket3LimitZ);
+			markPartOfMesh(CrossheadBracketMesh.vertices, triangles, bracket4LimitX, bracket4LimitY, bracket4LimitZ);
+			markPartOfMesh(CrossheadBracketMesh.vertices, triangles, bracket5LimitX, bracket5LimitY, bracket5LimitZ);
+			markPartOfMesh(CrossheadBracketMesh.vertices, triangles, new(-1.1f, 0.14f), bracket6LimitY, bracket6LimitZ);
+			markPartOfMesh(CrossheadBracketMesh.vertices, triangles, crossheadGuideLimitX, crossheadGuideLimitY, crossheadGuideLimitZ);
+			deleteUnmarkedPartOfMesh(CrossheadBracketMesh, triangles);
+		}
+
+		/*private void getDryPipeMesh()
+		{
+			DryPipeMesh = new OBJLoader().Load(exportPathFull + "\\dry_pipe_new.obj");
+		}
+
+		private void getIntakeManifoldFMesh()
+		{
+			IntakeManifoldFMesh = new OBJLoader().Load(exportPathFull + "\\intake_manifold_f.obj");
+		}
+
+		private void getIntakeManifoldRMesh()
+		{
+			IntakeManifoldRMesh = new OBJLoader().Load(exportPathFull + "\\intake_manifold_r.obj");
+		}*/
 
 		private void getCaliperMesh()
 		{
@@ -396,9 +583,6 @@ namespace RearrangedS282
 			BrakeCaliperMesh.vertices = caliperVertices;
 			caliperTriangles = caliperTriangles.Where((source, index) => source != -1).ToArray();
 			BrakeCaliperMesh.triangles = caliperTriangles;
-			BrakeCaliperMesh.RecalculateNormals();
-			BrakeCaliperMesh.RecalculateTangents();
-			BrakeCaliperMesh.RecalculateBounds();
 		}
 
 		private void getCaliperSandMesh()
@@ -543,9 +727,42 @@ namespace RearrangedS282
 
 			TwoAxleSideRodMesh.vertices = twoAxleSideRodVerts;
 			TwoAxleSideRodMesh.triangles = twoAxleSideRodTris;
+
+			//Create duplex side rod mesh. Same as the 4 axle side rod mesh, but the
+			//spacing is a bit different.
+			TwoAxleDuplexSideRodMesh = UnityEngine.Object.Instantiate(TwoAxleSideRodMesh);
+			Vector3[] twoAxleDuplexSiderodVerts = TwoAxleDuplexSideRodMesh.vertices;
+			foreach (Range range in verticesToMoveForward325)
+			{
+				for (int i = range.start; i < range.end; i++)
+				{
+					twoAxleDuplexSiderodVerts[i].z += 0.17f;
+				}
+			}
+			for (int i = 152; i < 211; i += 2)
+			{
+				twoAxleDuplexSiderodVerts[i].z += 0.17f;
+			}
+			foreach (Range range in verticesToMoveForward015)
+			{
+				for (int i = range.start; i < range.end; i++)
+				{
+					twoAxleDuplexSiderodVerts[i].z += 0.17f;
+				}
+			}
+			twoAxleDuplexSiderodVerts[173].z += 0.17f;
+			twoAxleDuplexSiderodVerts[175].z += 0.17f;
+			twoAxleDuplexSiderodVerts[237].z += 0.17f;
+			twoAxleDuplexSiderodVerts[239].z += 0.17f;
+
+			TwoAxleDuplexSideRodMesh.vertices = twoAxleDuplexSiderodVerts;
+
 			TwoAxleSideRodMesh.RecalculateNormals();
 			TwoAxleSideRodMesh.RecalculateTangents();
 			TwoAxleSideRodMesh.RecalculateBounds();
+			TwoAxleDuplexSideRodMesh.RecalculateNormals();
+			TwoAxleDuplexSideRodMesh.RecalculateTangents();
+			TwoAxleDuplexSideRodMesh.RecalculateBounds();
 
 			//Load the new three axle siderod mesh into the game
 			ThreeAxleSideRodMesh = UnityEngine.Object.Instantiate(sideRodMesh);
@@ -615,5 +832,16 @@ namespace RearrangedS282
 			FiveSixAxleSideRodMesh.RecalculateTangents();
 			FiveSixAxleSideRodMesh.RecalculateBounds();
 		}
+
+		/*private void getFranklinValveGearMeshes()
+		{
+			TransmissionBoxMesh = new OBJLoader().Load(exportPathFull + "\\transmission_box.obj");
+			UJointMesh = new OBJLoader().Load(exportPathFull + "\\u_joint.obj");
+			DriveshaftFMesh = new OBJLoader().Load(exportPathFull + "\\driveshaft_f.obj");
+			DriveshaftMMesh = new OBJLoader().Load(exportPathFull + "\\driveshaft_r.obj");
+			DriveshaftRMesh = new OBJLoader().Load(exportPathFull + "\\driveshaft_r.obj");
+			TransmissionBoxMountShaftMesh = new OBJLoader().Load(exportPathFull + "\\transmission_box_mount_shaft.obj");
+			DriveshaftMMountShaftMesh = new OBJLoader().Load(exportPathFull + "\\transmission_box_mount_shaft.obj");
+		}*/
 	}
 }

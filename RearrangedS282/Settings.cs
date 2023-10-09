@@ -34,11 +34,11 @@ namespace RearrangedS282
 		}
 
 		private const int HEIGHT = 12;
-		[Space(5)]
 
-		[Draw("Allow the S282's wheels to turn when destroyed:")] public bool explodedDrivetrainRotate = true;
+		/*[Draw("Allow the S282's wheels to turn when destroyed:")] public bool explodedDrivetrainRotate = true;*/
 
 		[Header("Reapply wheel arrangement to update")]
+		[Space(5)]
 		[Header("Trailing truck style")]
 		[Draw("4-4-2 trailing truck style:", DrawType.ToggleGroup)] public X82Options x42Options = X82Options.vanilla;
 		[Draw("4-6-2 trailing truck style:", DrawType.ToggleGroup)] public X102Options x62Options = X102Options.vanilla;
@@ -85,6 +85,8 @@ namespace RearrangedS282
 		[Draw("Randomly spawn 2-12-0:", Height = HEIGHT)] public bool spawn2120 = true;
 		[Draw("Randomly spawn 2-12-2:", Height = HEIGHT)] public bool spawn2122 = true;
 		[Draw("Randomly spawn 4-12-2:", Height = HEIGHT)] public bool spawn4122 = true;
+		[Draw("Randomly spawn 2-4-4-2:", Height = HEIGHT)] public bool spawn2442 = true;
+		[Draw("Randomly spawn 4-4-4-4:", Height = HEIGHT)] public bool spawn4444 = true;
 
 		public List<WheelArrangementType> RandomWAs;
 
@@ -165,6 +167,12 @@ namespace RearrangedS282
 				RandomWAs.Add(WheelArrangementType.s2122);
 			if (spawn4122)
 				RandomWAs.Add(WheelArrangementType.s4122);
+
+			//DUPLEX
+			if (spawn2442)
+				RandomWAs.Add(WheelArrangementType.s2442);
+			if (spawn4444)
+				RandomWAs.Add(WheelArrangementType.s4444);
 		}
 	}
 }

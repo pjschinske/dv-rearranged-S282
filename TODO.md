@@ -1,5 +1,25 @@
 # TODO
-- make sure braking force is scaled correctly per axle
+
+- remove gap at end of stroke for duplex valve gear
+- rename dry pipes to branch pipes
+- model rest of Franklin type B valve gear
+- fix cylinder to crosshead bracket interface
+- add rear cylinder colliders
+
+- move cylinder water drain thing with cylinders
+- copy cylinder water drip animations
+- show dry pipes in exploded model
+- hide front dry pipe?
+- remodel front dry pipe?
+- texture dry pipe mesh
+    - model should be 100% done for this
+- make sure duplex wheels are clocked correctly
+    - should be the same front-to-back
+- make WA persist across saves
+    - custom save file that matches locomotive number to wheel arrangement
+- fix crosshead brackets on duplexes
+- Either hide all LODs or make them actually LOD
+- decrease the derail threshold with # of leading/trailing axles
 
 ## Bugs
 - Error in log: "Mesh.vertices is too small. The supplied vertex array has less vertices than are referenced by the triangles array."
@@ -8,6 +28,9 @@
 - Fourth axle spring perch clips with 6th drive wheels (won't fix)
 - Drivetrain animations are synced after explosion and deexplosion (might fix later)
 - Scale front axle mounts don't get scaled properly (might fix later)
+- Doesn't work on Linux due to extractor not running right
+    - This sometimes happens on Windows too for some reason
+    - can fix if I can release assets as prefabs
 
 ## Set aside for future updates
 - Moving valve gear bracket
@@ -23,26 +46,7 @@ I thought about adding a new \[axle\] to the PoweredWheelsManager in \[poweredWh
 
 ## Changes since last update
 - Added wheel arrangements with different sized drivers:
-    - 4-4-0 American
-    - 4-4-2 Atlantic
-    - 4-4-4 Reading (pronounced RED - ing)
-    - 4-6-0 Ten-wheeler
-    - 4-6-2 Pacific
-    - 2-8-2 High-speed Mikado
-    - 0-12-0 Twelve-wheel switcher
-    - 2-12-0 Centipede
-    - 2-12-2
-    - 4-12-2 Union Pacific
-- On the 4-8-0, 4-8-2, and 4-8-4, the drivers have been moved back and the leading wheels altered to look better
-- Some other minor leading and trailing axle spacing improvements
-- Ten-coupled engines now have a blind fourth driver as well (to match the PRR I-1 class)
-- Vanilla trailing axle is shrunk by 10% because I like it better that way
-- Brakes now appear on all drive wheels
-- You can now configure which wheel arrangements automatically spawn
-- Created option to allow the S282's wheels to spin when exploded
-- Patched a bug in vanilla DV where the wheel sparks spawn slightly too low on the S282
+    - 2-4-4-2
+    - 4-4-4-4
+    - 2-6-6-2?
 ### Bug fixes
-- Vanilla trailing axles now turn at the correct speed
-- Decreased clipping through the rails
-- Got rid of strange movement when changing wheel arrangements
-- Exploded locomotives now look like they should

@@ -13,6 +13,7 @@ using UnityEngine;
 using static Oculus.Avatar.CAPI;
 using DV.ModularAudioCar;
 using JetBrains.Annotations;
+using VLB;
 
 namespace RearrangedS282
 {
@@ -266,25 +267,28 @@ namespace RearrangedS282
 				loco.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/s282_brake_shoes").gameObject.SetActive(false);
 
 				//replace main loco mesh
-				MeshFilter filter = loco.transform
+				MeshFilter newFilter = loco.transform
 				.Find("LocoS282AExploded_Body(Clone)/Static_LOD0/s282_locomotive_body")
 				.GetComponent<MeshFilter>();
-				if (filter is null)
+				MeshFilter oldFilter = loco.transform
+				.Find("LocoS282A_Body/Static_LOD0/s282_locomotive_body")
+				.GetComponent<MeshFilter>();
+				if (newFilter is null)
 				{
 					Main.Logger.Warning("MeshFilter was null on an exploded S282");
 					return;
 				}
-				Mesh mesh = filter.sharedMesh;
+				Mesh mesh = newFilter.sharedMesh;
 				if (mesh is null)
 				{
 					Main.Logger.Warning("Mesh was null on an exploded S282");
 					return;
 				}
-				Mesh newS282Mesh = UnityEngine.Object.Instantiate(MeshFinder.Instance.S282Mesh);
+				Mesh newS282Mesh = UnityEngine.Object.Instantiate(oldFilter.sharedMesh);
 				//for some reason the OBJloader flips the mesh left to right, so we have to flip it back
-				filter.transform.localScale = new Vector3(-1, 1, 1);
+				newFilter.transform.localScale = new Vector3(-1, 1, 1);
 				newS282Mesh.UploadMeshData(true);
-				filter.sharedMesh = newS282Mesh;
+				newFilter.sharedMesh = newS282Mesh;
 				Main.Logger.Log("Loaded new exploded S282 mesh");
 
 				//make exploded drivetrain rotate
@@ -319,7 +323,7 @@ namespace RearrangedS282
 			static void Postfix(ref ExplosionModelHandler __instance)
 			{
 				Transform loco = __instance.transform;
-				var wheelRearranger = loco.GetComponent<WheelRearranger>();
+				var wheelRearranger = __instance.gameObject.GetOrAddComponent<WheelRearranger>();
 				wheelRearranger.SwitchWheelArrangement((int) wheelRearranger.currentWA);
 				//We hid these LODs earlier, but now they're useful again
 				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(true);

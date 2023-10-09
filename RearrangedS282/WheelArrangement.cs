@@ -39,7 +39,12 @@ namespace RearrangedS282
 		s0120,
 		s2120,
 		s2122,
-		s4122
+		s4122,
+		s2442,
+		s4444,
+		s2662,
+		s2680,
+		s4664
 	}
 
 	public static class WheelArrangement
@@ -81,7 +86,12 @@ namespace RearrangedS282
 			"0-12-0 Twelve-wheel switcher",
 			"2-12-0",
 			"2-12-2",
-			"4-12-2 Union Pacific"
+			"4-12-2 Union Pacific",
+			"2-4-4-2",
+			"4-4-4-4",
+			"2-6-6-2",
+			"2-6-8-0",
+			"4-6-6-4 Challenger"
 		};
 	}
 }

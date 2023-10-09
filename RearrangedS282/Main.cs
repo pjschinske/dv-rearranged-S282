@@ -8,6 +8,7 @@ namespace RearrangedS282
 	public static class Main
 	{
 		public static UnityModManager.ModEntry.ModLogger Logger { get; private set; }
+		public static string ModPath { get; private set; }
 		public static Settings settings { get; private set; }
 
 		public static bool IsGaugeModInstalled { get; private set; }
@@ -16,6 +17,7 @@ namespace RearrangedS282
 		private static bool Load(UnityModManager.ModEntry modEntry)
 		{
 			Logger = modEntry.Logger;
+			ModPath = modEntry.Path;
 			Harmony harmony = null;
 
 			settings = Settings.Load<Settings>(modEntry);

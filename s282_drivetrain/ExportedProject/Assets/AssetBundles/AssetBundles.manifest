@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 4056872111
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: s282_drivetrain
+      Dependencies: {}

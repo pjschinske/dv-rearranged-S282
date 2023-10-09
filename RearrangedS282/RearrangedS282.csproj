@@ -11,9 +11,6 @@
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp">
 		</Reference>
-		<Reference Include="AssetsTools.NET">
-		  <HintPath>..\lib\AssetsToolsNET\AssetsTools.NET.dll</HintPath>
-		</Reference>
 		<Reference Include="DV.ThingTypes">
 		</Reference>
 		<Reference Include="DV.Simulation">
@@ -44,6 +41,7 @@
 		</PackageReference>
 		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
 		<Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
+		<Publicize Include="DV.Simulation" IncludeCompilerGeneratedMembers="false" />
 		<PackageReference Include="UnityModManager" Version="0.27.2" />
 	</ItemGroup>
 	
@@ -69,7 +67,10 @@
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<!-- Copy to build folder -->
 		<Copy SourceFiles="$(TargetPath)" DestinationFolder="../build/" />
-		<Copy SourceFiles="$(ProjectDir)..\animation_curves.json" DestinationFolder="../build/assets" />
+		
+		<Copy SourceFiles="$(ProjectDir)..\resources.assets\ExportedProject\Assets\AssetBundles\s282_drivetrain"
+			  DestinationFolder="../build/assets"
+		/>
 
 		<!-- Package after Release build -->
 		<Exec Condition="'$(ConfigurationName)' == 'Debug' And '$(OS)' == 'Windows_NT'" Command="powershell -executionpolicy bypass -Command &quot;(../package.ps1 -IncludeBuildNum)&quot;" />

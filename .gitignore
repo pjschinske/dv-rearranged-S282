@@ -1,3 +1,23 @@
+# Unity stuff
+s282_drivetrain/ExportedProject/[Ll]ibrary/
+s282_drivetrain/ExportedProject/[Tt]emp/
+s282_drivetrain/ExportedProject/[Oo]bj/
+s282_drivetrain/ExportedProject/[Bb]uild/
+s282_drivetrain/ExportedProject/[Bb]uilds/
+s282_drivetrain/ExportedProject/[Ll]ogs/
+s282_drivetrain/ExportedProject/[Uu]ser[Ss]ettings/
+s282_drivetrain/ExportedProject/ExportedProject_Data/
+s282_drivetrain/ExportedProject/MonoBleedingEdge/
+# Unity builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
 # Local reference configuration
 Directory.Build.targets
 
