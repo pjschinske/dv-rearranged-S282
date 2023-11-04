@@ -68,9 +68,7 @@
 		<!-- Copy to build folder -->
 		<Copy SourceFiles="$(TargetPath)" DestinationFolder="../build/" />
 		
-		<Copy SourceFiles="$(ProjectDir)..\resources.assets\ExportedProject\Assets\AssetBundles\s282_drivetrain"
-			  DestinationFolder="../build/assets"
-		/>
+		<Copy SourceFiles="$(ProjectDir)..\s282_drivetrain\ExportedProject\Assets\AssetBundles\s282_drivetrain" DestinationFolder="../build/assets" />
 
 		<!-- Package after Release build -->
 		<Exec Condition="'$(ConfigurationName)' == 'Debug' And '$(OS)' == 'Windows_NT'" Command="powershell -executionpolicy bypass -Command &quot;(../package.ps1 -IncludeBuildNum)&quot;" />

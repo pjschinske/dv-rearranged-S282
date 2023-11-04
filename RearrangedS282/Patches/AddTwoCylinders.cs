@@ -8,7 +8,7 @@ using LocoSim.Definitions;
 using System.Linq;
 using System.Reflection.Emit;
 
-namespace RearrangedS282
+namespace RearrangedS282.Patches
 {
 	[HarmonyPatch(typeof(ReciprocatingSteamEngine),
 				  MethodType.Constructor,

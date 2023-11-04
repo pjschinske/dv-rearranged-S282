@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RearrangedS282
+namespace RearrangedS282.Patches
 {
 	//By default, the Bogie.Axles getter gets all [axles] that it can find.
 	//We don't want it to get the inactive ones, so we tell it to remove the

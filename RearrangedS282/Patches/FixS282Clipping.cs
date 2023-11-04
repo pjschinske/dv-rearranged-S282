@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RearrangedS282
+namespace RearrangedS282.Patches
 {
 
 	//TODO: figure out how to make fifth wheel, axles always spawn right when gauge mod is installed
@@ -24,7 +24,7 @@ namespace RearrangedS282
 				Main.Logger.Log("Gauge mod installed, skipping alteration of S282 mesh");
 				return;
 			}*/
-			if (__instance.carType != TrainCarType.LocoSteamHeavy)
+			/*if (__instance.carType != TrainCarType.LocoSteamHeavy)
 				return;
 
 			MeshFilter filter = __instance.transform
@@ -47,7 +47,7 @@ namespace RearrangedS282
 			__instance.transform.Find("LocoS282A_Body/Static_LOD0/s282_locomotive_body").localScale = new Vector3(-1, 1, 1);
 			//newS282Mesh.UploadMeshData(true);
 			filter.sharedMesh = newS282Mesh;
-			Main.Logger.Log("Loaded new S282 mesh");
+			Main.Logger.Log("Loaded new S282 mesh");*/
 		}
 	}
 }

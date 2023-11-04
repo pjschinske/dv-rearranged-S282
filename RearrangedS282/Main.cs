@@ -32,9 +32,6 @@ namespace RearrangedS282
 				harmony = new Harmony(modEntry.Info.Id);
 				harmony.PatchAll();
 
-				Main.Logger.Log("Finding s282 mesh...");
-				Mesh mesh = MeshFinder.Instance.S282Mesh;
-				Main.Logger.Log("Done finding s282 mesh");
 			}
 			catch (Exception ex)
 			{
