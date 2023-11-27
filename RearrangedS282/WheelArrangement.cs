@@ -42,9 +42,9 @@ namespace RearrangedS282
 		s4122,
 		s2442,
 		s4444,
-		s2662,
+		/*s2662,
 		s2680,
-		s4664
+		s4664*/
 	}
 
 	public static class WheelArrangement
@@ -89,9 +89,9 @@ namespace RearrangedS282
 			"4-12-2 Union Pacific",
 			"2-4-4-2",
 			"4-4-4-4",
-			"2-6-6-2",
+			/*"2-6-6-2",
 			"2-6-8-0",
-			"4-6-6-4 Challenger"
+			"4-6-6-4 Challenger"*/
 		};
 	}
 }

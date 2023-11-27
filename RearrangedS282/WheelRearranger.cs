@@ -133,6 +133,8 @@ namespace RearrangedS282
 
 			lfCylinder,
 			rfCylinder,
+			lDryPipe,
+			rDryPipe,
 
 			lCrosshead,
 			rCrosshead,
@@ -268,6 +270,9 @@ namespace RearrangedS282
 
 			lfCylinder = splitLoco.Find("s282a_cylinder_l");
 			rfCylinder = splitLoco.Find("s282a_cylinder_r");
+
+			lDryPipe = splitLoco.Find("s282a_dry_pipe_l");
+			rDryPipe = splitLoco.Find("s282a_dry_pipe_r");
 		}
 
 		private void SetupLubrication()
@@ -1031,7 +1036,7 @@ namespace RearrangedS282
 
 			HideLeadingWheels();
 			ResetBody();
-			ResetToFourCoupled();
+			ResetToFourCoupled(); 
 			HideTrailingWheels();
 
 			FixExplodedModel();
@@ -1050,8 +1055,8 @@ namespace RearrangedS282
 				case WheelArrangementType.s2120:
 				case WheelArrangementType.s2122:
 				case WheelArrangementType.s2442:
-				case WheelArrangementType.s2662:
-				case WheelArrangementType.s2680:
+				//case WheelArrangementType.s2662:
+				//case WheelArrangementType.s2680:
 					ShowTwoLeadingWheels();
 					break;
 				case WheelArrangementType.s4100:
@@ -1059,7 +1064,7 @@ namespace RearrangedS282
 				case WheelArrangementType.s4104:
 				case WheelArrangementType.s4122:
 				case WheelArrangementType.s4444:
-				case WheelArrangementType.s4664:
+				//case WheelArrangementType.s4664:
 					ShowFourLeadingWheels();
 					break;
 				case WheelArrangementType.s440:
@@ -1131,12 +1136,12 @@ namespace RearrangedS282
 				case WheelArrangementType.s4444:
 					Showx44xDuplex();
 					break;
-				case WheelArrangementType.s2662:
-				case WheelArrangementType.s4664:
-					Showx66xDuplex();
-					break;
-				case WheelArrangementType.s2680:
-					Showx68xDuplex();
+				//case WheelArrangementType.s2662:
+				//case WheelArrangementType.s4664:
+				//	Showx66xDuplex();
+				//	break;
+				//case WheelArrangementType.s2680:
+				//	Showx68xDuplex();
 					break;
 				default:
 					break;
@@ -1224,7 +1229,7 @@ namespace RearrangedS282
 				case WheelArrangementType.s2122:
 				case WheelArrangementType.s4122:
 				case WheelArrangementType.s2442:
-				case WheelArrangementType.s2662:
+				//case WheelArrangementType.s2662:
 					ShowTwoTrailingWheelsFor12Coupled();
 					break;
 
@@ -1242,7 +1247,7 @@ namespace RearrangedS282
 				case WheelArrangementType.s2104:
 				case WheelArrangementType.s4104:
 				case WheelArrangementType.s4444:
-				case WheelArrangementType.s4664:
+				//case WheelArrangementType.s4664:
 					ShowFourTrailingWheelsFor10Coupled();
 					break;
 				default:
@@ -1280,49 +1285,47 @@ namespace RearrangedS282
 			skipWheelArrangementChange = false;
 		}
 
+		//The idea is to only fix the exploded model if we haven't done it already.
+		//To do this we need to know how many gameObjectSwaps the loco usually uses
+		//so we know if we've added any or not.
+		private static int stockNumOfMaterialSwaps = -1;
+
 		// Exploded locos are handled separately from regular locos, so we need to alter
 		// the model to look right when it gets exploded
 		private void FixExplodedModel()
 		{
 			ExplosionModelHandler explosionModelHandler = GetComponent<ExplosionModelHandler>();
+			if (explosionModelHandler is null)
+			{
+				Main.Logger.Error("ExplosionModelHandler is null in FixExplodedModel()");
+			}
 
 			//if we've already added the new axles to this loco, don't do it again
-			if (explosionModelHandler.gameObjectsToReplace.Length > 4)
+			if (stockNumOfMaterialSwaps == -1)
+			{
+				stockNumOfMaterialSwaps = explosionModelHandler.materialSwaps.Length;
+			}
+			else if (explosionModelHandler.materialSwaps.Length > stockNumOfMaterialSwaps)
 			{
 				return;
 			}
-			//GameObject frontAxle1 = firstFrontAxle.Find("axleF_model").gameObject;
-			GameObject frontAxle2 = secondFrontAxle.Find("axleF_model").gameObject;
-			//Main.Logger.Log("Finished getting exploded front axles, now for the rear");
-			//GameObject rearAxle1 = loco.transform.Find("Axle_R/bogie_car").GetComponentInChildren<MeshFilter>().gameObject;
-			GameObject rearAxle2 = secondRearAxle.Find("axleF_model").gameObject;
-			GameObject rearAxle3 = thirdRearAxle.Find("axleF_model").gameObject;
-			//Main.Logger.Log("Finished getting exploded axles");
+			GameObject frontAxle2 = secondFrontAxle.gameObject;
+			GameObject rearAxle2 = secondRearAxle.gameObject;
+			GameObject rearAxle3 = thirdRearAxle.gameObject;
 
-			explosionModelHandler.gameObjectsToReplace = explosionModelHandler.gameObjectsToReplace
+			//This incantation adds the axle to the explosionModelHandler.
+			//By doing this, the axle textures (for all LODs) will be automatically
+			//swapped out when the loco is exploded (or "exploaded" as Altfuture says, lol)
+			explosionModelHandler.materialSwaps[1].affectedGameObjects
+				= explosionModelHandler.materialSwaps[1].affectedGameObjects
 				.Append(frontAxle2)
 				.Append(rearAxle2)
-				.Append(rearAxle3)
-				/*.Append(lx44xBranchPipe.gameObject)
-				.Append(rx44xBranchPipe.gameObject)*/
-				.ToArray();
+				.Append(rearAxle3).ToArray();
 
-			GameObject explodedFrontAxle = explosionModelHandler.replacePrefabsToSpawn[2];
-			explosionModelHandler.replacePrefabsToSpawn = explosionModelHandler.replacePrefabsToSpawn
-				.Append(explodedFrontAxle)
-				.Append(explodedFrontAxle)
-				.Append(explodedFrontAxle)
-				/*.Append(lx44xBranchPipe.gameObject)
-				.Append(rx44xBranchPipe.gameObject)*/
-				.ToArray();
-
-			explosionModelHandler.nonExplodedModelGOs.Add(frontAxle2);
-			explosionModelHandler.nonExplodedModelGOs.Add(rearAxle2);
-			explosionModelHandler.nonExplodedModelGOs.Add(rearAxle3);
 			//Main.Logger.Log("Finished fixing exploded axles");
 		}
 
-//------ HIDE WHEELS ------
+		//------ HIDE WHEELS ------
 
 		//This hides any leading wheels.
 		private void HideLeadingWheels()
@@ -1341,9 +1344,8 @@ namespace RearrangedS282
 		}
 
 		//When testing, I ran into a bug where the locomotive would "hop" forward or
-		//backward slightly when changing between an 8-coupled and a 10-coupled or
-		//vice versa. This method turns off physics updates during that transition so
-		//that that "hop" doesn't happen.
+		//backward slightly when moving the bogies. This method turns off physics
+		//updates during that transition so that the "hop" doesn't happen.
 		private static async void setBogieKinematicLater(Rigidbody bogie)
 		{
 			bool isKinematic = bogie.isKinematic;
@@ -1398,6 +1400,15 @@ namespace RearrangedS282
 
 			lfCylinder.localPosition = Vector3.zero;
 			rfCylinder.localPosition = Vector3.zero;
+			lfCylinder.gameObject.SetActive(true);
+			rfCylinder.gameObject.SetActive(true);
+
+			lDryPipe.localPosition = Vector3.zero;
+			rDryPipe.localPosition = Vector3.zero;
+			lDryPipe.localScale = new Vector3(-1, 1, 1);
+			rDryPipe.localScale = new Vector3(-1, 1, 1);
+			lDryPipe.gameObject.SetActive(true);
+			rDryPipe.gameObject.SetActive(true);
 
 			lCrosshead.localScale = Vector3.one;
 			rCrosshead.localScale = Vector3.one;
@@ -1860,8 +1871,8 @@ namespace RearrangedS282
 			spark4L.gameObject.SetActive(false);
 			spark4R.gameObject.SetActive(false);
 
-			lfCylinder.localPosition = new Vector3(0, 0.36f, 0);
-			rfCylinder.localPosition = new Vector3(0, 0.36f, 0);
+			lfCylinder.localPosition = new Vector3(0, 0.3f, 0);
+			rfCylinder.localPosition = new Vector3(0, 0.3f, 0);
 
 			lCrosshead.localScale = new Vector3(1, 0.7f, 1);
 			rCrosshead.localScale = new Vector3(1, 0.7f, 1);
@@ -1890,7 +1901,7 @@ namespace RearrangedS282
 			airPumpOutputPipe.localScale = new Vector3(1, 1, 1.12f);
 
 			//crosshead guide and lifting arm support
-			lfCrossheadBracket.localPosition = new Vector3(0, 0.36f, -1);
+			lfCrossheadBracket.localPosition = new Vector3(0, 0.3f, -1);
 			lfCrossheadBracket.localScale = new Vector3(-1, 1, 1.25f);
 			rfCrossheadBracket.localPosition = lfCrossheadBracket.localPosition;
 			rfCrossheadBracket.localScale = lfCrossheadBracket.localScale;
@@ -1951,8 +1962,8 @@ namespace RearrangedS282
 			spark4L.gameObject.SetActive(false);
 			spark4R.gameObject.SetActive(false);
 
-			lfCylinder.localPosition = new Vector3(0, 0.265f, 0);
-			rfCylinder.localPosition = new Vector3(0, 0.265f, 0);
+			lfCylinder.localPosition = new Vector3(0, 0.21f, 0);
+			rfCylinder.localPosition = new Vector3(0, 0.21f, 0);
 
 			lCrosshead.localScale = new Vector3(1, 0.78f, 1);
 			rCrosshead.localScale = new Vector3(1, 0.78f, 1);
@@ -1981,7 +1992,7 @@ namespace RearrangedS282
 			airPumpOutputPipe.localScale = new Vector3(1, 1, 1.12f);
 
 			//crosshead guide and lifting arm support
-			lfCrossheadBracket.localPosition = new Vector3(0, 0.265f, 0);
+			lfCrossheadBracket.localPosition = new Vector3(0, 0.21f, 0);
 			rfCrossheadBracket.localPosition = lfCrossheadBracket.localPosition;
 			lLiftingArmSupport.gameObject.SetActive(false);
 			rLiftingArmSupport.gameObject.SetActive(false);
@@ -2052,6 +2063,15 @@ namespace RearrangedS282
 			//hide mechanical lubricator linkage
 			driveR.Find("s282_mech_cutoff_rail/s282_mech_lubricator_rod").gameObject.SetActive(false);
 			driveR.Find("LubricatorParts").gameObject.SetActive(false);
+
+			lfCylinder.localPosition = new Vector3(0, 0.145f, 0);
+			rfCylinder.localPosition = new Vector3(0, 0.145f, 0);
+
+			//crosshead guide and lifting arm support
+			lfCrossheadBracket.localPosition = new Vector3(0, 0.145f, 0);
+			rfCrossheadBracket.localPosition = lfCrossheadBracket.localPosition;
+			lLiftingArmSupport.gameObject.SetActive(false);
+			rLiftingArmSupport.gameObject.SetActive(false);
 
 			//hide or show valve gear
 			if (!Main.settings.show282BigValveGear)
@@ -2201,6 +2221,19 @@ namespace RearrangedS282
 			driveR.Find("s282_mech_cutoff_rail/s282_mech_lubricator_rod").gameObject.SetActive(false);
 			driveR.Find("LubricatorParts").gameObject.SetActive(false);
 
+			lfCylinder.localPosition = new Vector3(0, -0.11f, 0);
+			rfCylinder.localPosition = new Vector3(0, -0.11f, 0);
+			lDryPipe.localPosition = new Vector3(0, -0.5f, 0);
+			rDryPipe.localPosition = new Vector3(0, -0.5f, 0);
+			lDryPipe.localScale = new Vector3(-1, 1.2f, 1);
+			rDryPipe.localScale = new Vector3(-1, 1.2f, 1);
+
+			//crosshead guide and lifting arm support
+			lfCrossheadBracket.localPosition = new Vector3(0, 0.145f, 0);
+			rfCrossheadBracket.localPosition = lfCrossheadBracket.localPosition;
+			lLiftingArmSupport.gameObject.SetActive(false);
+			rLiftingArmSupport.gameObject.SetActive(false);
+
 			//hide or show valve gear
 			if (!Main.settings.show12CoupledValveGear)
 				HideValveGear();
@@ -2268,11 +2301,18 @@ namespace RearrangedS282
 			driveR2.Find("s282_wheels_driving_4").gameObject.SetActive(false);
 
 			lfCrossheadBracket.localScale = new Vector3(-1, 1, 1);
-			lfCrossheadBracket.localPosition = new Vector3(0, 0, 4.95f);
+			lfCrossheadBracket.localPosition = new Vector3(0, 0f, -4.58f);
 			rfCrossheadBracket.localScale = new Vector3(-1, 1, 1);
-			rfCrossheadBracket.localPosition = new Vector3(0, 0.07f, 0.07f);
+			rfCrossheadBracket.localPosition = new Vector3(0, 0f, -4.58f);
 			lrCrossheadBracket.localScale = new Vector3(-1, 1, 1);
+			lrCrossheadBracket.localPosition = new Vector3(0, 0, 0.065f);
 			rrCrossheadBracket.localScale = new Vector3(-1, 1, 1);
+			rrCrossheadBracket.localPosition = new Vector3(0, 0, 0.065f);
+
+			lfCylinder.gameObject.SetActive(false);
+			rfCylinder.gameObject.SetActive(false);
+			lDryPipe.gameObject.SetActive(false);
+			rDryPipe.gameObject.SetActive(false);
 
 			lfCrossheadBracket.gameObject.SetActive(true);
 			rfCrossheadBracket.gameObject.SetActive(true);

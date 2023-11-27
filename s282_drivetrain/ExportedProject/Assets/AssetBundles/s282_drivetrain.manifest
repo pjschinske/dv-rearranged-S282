@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1932355018
+CRC: 448252191
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 0919c380f2fb1e71a333751c6347978a
+    Hash: 500dd043d0ffe7d9a4a8dacf0447727a
   TypeTreeHash:
     serializedVersion: 2
     Hash: 3b84a9dd0eb567d674b4eb2526617b1c
@@ -32,4 +32,6 @@ Assets:
 - Assets/Prefabs/franklin_type_b.prefab
 - Assets/Prefabs/franklin_b_anim_ctrl.controller
 - Assets/Prefabs/branch_pipe.prefab
+- Assets/Mesh/u_joint_mapped.obj
+- Assets/Mesh/driveshaft_m_mapped.obj
 Dependencies: []
