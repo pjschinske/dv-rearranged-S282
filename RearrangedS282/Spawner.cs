@@ -14,6 +14,9 @@ using static Oculus.Avatar.CAPI;
 using DV.ModularAudioCar;
 using JetBrains.Annotations;
 using VLB;
+using DV.Damage;
+using LocoSim.Definitions;
+using RearrangedS282.Sim;
 
 namespace RearrangedS282
 {
@@ -36,6 +39,16 @@ namespace RearrangedS282
 			}
 		}
 
+		[HarmonyPatch(typeof(TrainCar), "Start")]
+		class YourPatchName
+		{
+			[HarmonyAfter(new string[] { "LocoMeshSplitter" })]
+			static void Postfix(TrainCar __instance)
+			{
+				//Your code here
+			}
+		}
+
 		/*
 		 * If a ten-coupled locomotive explodes, add the fifth drive axle and the extra
 		 * side rod to the model.
@@ -43,7 +56,7 @@ namespace RearrangedS282
 		 * been spawned in yet, so we need to alter it as the exploded locomotive body
 		 * prefab is spawned in.
 		 */
-		[HarmonyPatch(typeof(ExplosionModelHandler), nameof(ExplosionModelHandler.HandleExplosionModelChange))]
+		//[HarmonyPatch(typeof(ExplosionModelHandler), nameof(ExplosionModelHandler.HandleExplosionModelChange))]
 		class ExplodeDriveAxles
 		{
 			static void Postfix(ref ExplosionModelHandler __instance)

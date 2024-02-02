@@ -13,8 +13,10 @@ It can convert the S282 into any of these:
 - 0-8-4
 - 2-8-0 Consolidation
 - 2-8-2 Mikado (which I've altered the look of, although you can switch it back to the vanilla look in the mod's settings)
-- 2-8-2 High-speed Mikado
 - 2-8-4 Berkshire
+- 2-8-0 High-speed Consolidation
+- 2-8-2 High-speed Mikado
+- 2-8-4 High-speed Berkshire
 - 4-8-0 Twelve Wheeler
 - 4-8-2 Mountain
 - 4-8-4 Northern
@@ -31,6 +33,8 @@ It can convert the S282 into any of these:
 - 2-12-0
 - 2-12-2
 - 4-12-2 Union Pacific
+- 2-4-4-2
+- 4-4-4-4
 
 ## Locomotives with altered driver size
 
@@ -41,7 +45,7 @@ Version 1.1.0 has added new wheel arrangements where the drive wheels and valve 
 - The high-speed 2-8-2 Mikado has 67 inch drive wheels (~20% bigger)
 - All *x*-12-*x* locomotives have 48 inch drive wheels (~15% smaller)
 
-All others have the stock 56 inch drive wheels.
+All others (including the duplexes) have the stock 56 inch drive wheels.
 
 ## How does it work?
 
@@ -61,7 +65,7 @@ All others either:
 - would look too strange
 	- 2-6-0, 2-4-0, 4-14-4, etc.
 - or would take too much effort to add to the game
-	- e.g. 4-4-4-4, sorry Pennsy fans
+	- e.g. triplexes
 
 ## Nerdy details about the wheel arrangement names
 
@@ -74,6 +78,49 @@ Southern Pacific and Union Pacific both made 4-10-2's, and had different names f
 Then we get to the names of the 0-*x*-0 classes. Some historical sources call these *x*-coupled, as in six-coupled or eight-coupled. But often they also use these names for other classes as well. So "eight-coupled" might also be used for 2-8-0's and 2-8-2's. As far as I can tell, *x*-coupled really just means "it's got *x* drive wheels, all coupled together." So a 4-8-0 is an eight-coupled, but a 4-4-4-4 isn't.
 
 I thought about calling the 0-8-4 a "Forney eight-coupled", but this mod's 0-8-4 looks nothing like a real Forney, despite sharing the same wheel arrangement.
+
+## Building the code
+
+To build the code, open the project in Visual Studio and go to "Build" > "Build Solution", then fix any missing library errors that may have popped up.
+
+## Packaging the custom meshes
+
+To repackage the new custom meshes (for the Franklin valve gear), more effort is needed. You will need:
+
+- Autodesk Inventor
+- Blender
+- Unity 2019.4.40f1
+- Visual Studio
+
+The workflow is like this:
+1. Parts are modelled in Autodesk Inventor (I know it's weird but it works for me)
+2. In Inventor, export an OBJ file.
+
+    Here are the options I used, but you can experiment until you're happy with the level of detail and the number of triangles.
+    - Units: meter
+	- Surface deviation: 36%
+	- Normal deviation: 28
+	- Max edge length: 100%
+	- Aspect ratio: 21.5
+3. In Blender, import the OBJ, do the UV mapping, and export a new OBJ
+
+    To do the texture mapping in Blender:
+    1. Import the OBJ file, then give it the locomotive texture
+    2. Go into Edit Mode
+	3. press 'a' to select all vertices
+	4. press 'u' and select 'Smart UV Project'
+	5. increase the island margin to about 0.03
+	6. Go into the UV Editor and move the triangles around until the part looks good
+	7. Save your work and export the new part as another OBJ file
+
+4. Copy the new OBJ file with the UV mapping into the folder `s282_drivetrain\ExportedProject\Assets\Mesh`
+
+5. In Unity, open the project in the s282_drivetrain folder.
+   If all you're doing is updating an existing mesh, your new OBJ file will automatically load in.
+   If not, you'll need to add the new part in.
+6. Drag any updated prefabs from the Hierarchy tab to the Project tab under the "Prefabs" folder.
+7. Right click in the "project" area, then select "Build AssetBundles".
+8. Now you can go into Visual Studio and build the mod with your changes. When you build, it will automatically fetch the new AssetBundles that you just generated in Unity.
 
 ## License
 

@@ -27,6 +27,10 @@ namespace RearrangedS282
 
 			IsGaugeModInstalled = UnityModManager.FindMod("Gauge") is not null;
 
+#if DEBUG
+			Harmony.DEBUG = true;
+#endif
+
 			try
 			{
 				harmony = new Harmony(modEntry.Info.Id);

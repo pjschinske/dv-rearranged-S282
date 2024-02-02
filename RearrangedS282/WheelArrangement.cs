@@ -24,6 +24,7 @@ namespace RearrangedS282
 		s284,
 		s280Big,
 		s282Big,
+		s284Big,
 		s480,
 		s482,
 		s484,
@@ -42,6 +43,7 @@ namespace RearrangedS282
 		s4122,
 		s2442,
 		s4444,
+		s404,
 		/*s2662,
 		s2680,
 		s4664*/
@@ -56,7 +58,6 @@ namespace RearrangedS282
 
 		public static readonly string[] WheelArrangementNames =
 		{
-			//"2-4-0 Porter",
 			"4-4-0 American",
 			"4-4-2 Atlantic",
 			"4-4-4 Reading",
@@ -71,6 +72,7 @@ namespace RearrangedS282
 			"2-8-4 Berkshire",
 			"2-8-0 High-speed Consolidation",
 			"2-8-2 High-speed Mikado",
+			"2-8-4 High-speed Berkshire",
 			"4-8-0 Twelve wheeler",
 			"4-8-2 Mountain",
 			"4-8-4 Northern",
@@ -87,11 +89,50 @@ namespace RearrangedS282
 			"2-12-0",
 			"2-12-2",
 			"4-12-2 Union Pacific",
-			"2-4-4-2",
-			"4-4-4-4",
+			"2-4-4-2 Duplex",
+			"4-4-4-4 Duplex",
+			"4-0-4 Drivers not found",
 			/*"2-6-6-2",
 			"2-6-8-0",
 			"4-6-6-4 Challenger"*/
+		};
+
+		public static readonly float[] NumOfNondrivenWheels =
+		{
+			4,//"4-4-0 American",
+			6,//"4-4-2 Atlantic",
+			8,//"4-4-4 Reading",
+			4,//"4-6-0 Ten-wheeler",
+			6,//"4-6-2 Pacific",
+			8,//"4-6-4 Hudson",
+			0,//"0-8-0 Eight–wheel switcher",
+			2,//"0-8-2",
+			4,//"0-8-4",
+			2,//"2-8-0 Consolidation",
+			4,//"2-8-2 Mikado",
+			6,//"2-8-4 Berkshire",
+			2,//"2-8-0 High-speed Consolidation",
+			4,//"2-8-2 High-speed Mikado",
+			6,//"2-8-4 High-speed Berkshire",
+			4,//"4-8-0 Twelve wheeler",
+			6,//"4-8-2 Mountain",
+			8,//"4-8-4 Northern",
+			0,//"0-10-0 Ten-wheel switcher",
+			2,//"0-10-2 Union",
+			4,//"0-10-4",
+			2,//"2-10-0 Decapod",
+			4,//"2-10-2 Santa Fe",
+			6,//"2-10-4 Texas",
+			4,//"4-10-0 Mastodon",
+			6,//"4-10-2 Southern Pacific",
+			8,//"4-10-4",
+			0,//"0-12-0 Twelve-wheel switcher",
+			2,//"2-12-0",
+			4,//"2-12-2",
+			6,//"4-12-2 Union Pacific",
+			4,//"2-4-4-2",
+			8,//"4-4-4-4",
+			8,//"4-0-4",
 		};
 	}
 }

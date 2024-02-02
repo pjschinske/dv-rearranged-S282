@@ -21,13 +21,17 @@ namespace RearrangedS282
 		{
 			get { return _instance ??= new MeshFinder(); }
 		}
-
-		private static readonly String assetStudioPath = @".\Mods\RearrangedS282\AssetStudioModCLI_net472_win32_64\AssetStudioModCLI.exe";
+		private static readonly String modDLLPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+		private static readonly String modDLLFolderPath = System.IO.Path.GetDirectoryName(modDLLPath);
+		private static readonly String assetStudioPath = @".\Mods\RearrangedS282\AssetStudioModCLI_net472_win32_64\";
+		private static readonly String assetStudioEXEName = "AssetStudioModCLI.exe";
 		private static readonly String importPath = @"DerailValley_Data\resources.assets";
 		private static readonly String exportPath = @"mods\RearrangedS282\assets";
 		private static readonly String importPathFull = System.IO.Path.GetFullPath(importPath);
 		private static readonly String exportPathFull = System.IO.Path.GetFullPath(exportPath);
-		
+		private static readonly String sideRodMeshName = "s282_mech_wheels_connect";
+		private static readonly String mainRodMeshName = "s282_mech_push_rod_to_connect";
+
 		public Mesh TwoAxleSideRodMesh
 		{ get; private set; }
 		public Mesh ThreeAxleSideRodMesh
@@ -35,6 +39,8 @@ namespace RearrangedS282
 		public Mesh FiveSixAxleSideRodMesh
 		{ get; private set; }
 		public Mesh TwoAxleDuplexSideRodMesh
+		{ get; private set; }
+		public Mesh DuplexMainRodMesh
 		{ get; private set; }
 
 		readonly struct Range
@@ -47,6 +53,7 @@ namespace RearrangedS282
 				this.start = start;
 				this.end = end;
 			}
+
 			public bool contains(int x)
 			{
 				return x >= start && x < end;
@@ -68,6 +75,7 @@ namespace RearrangedS282
 				this.start = start;
 				this.end = end;
 			}
+
 			public bool contains(float x)
 			{
 				return x >= start && x <= end;
@@ -142,7 +150,34 @@ namespace RearrangedS282
 
 		public MeshFinder()
 		{
+			clearAssetStudioLogs();
+			getSideRodMeshes();
+			getMainRodMesh();
+
+			UnityEngine.Object.DontDestroyOnLoad(TwoAxleSideRodMesh);
+            UnityEngine.Object.DontDestroyOnLoad(ThreeAxleSideRodMesh);
+			UnityEngine.Object.DontDestroyOnLoad(FiveSixAxleSideRodMesh);
+			UnityEngine.Object.DontDestroyOnLoad(TwoAxleDuplexSideRodMesh);
+			UnityEngine.Object.DontDestroyOnLoad(DuplexMainRodMesh);
+		}
+
+		//This looks in the game files with AssetStudio, finds the specified mesh,
+		//and puts it into an OBJ file for us to load later
+		private void generateMeshFromGameFiles(string meshName)
+		{
 			//https://stackoverflow.com/questions/1469764/run-command-prompt-commands
+
+			//Ideally we'd just run the AssetStudio executable directly. But our version
+			//of AssetStudio is 32 bit, and DV is 64 bit (I think it's impossible to run
+			//a 32 bit executable directly from a 64 bit process).
+
+			//The proper solution would be to either:
+			//	- recompile AssetStudio as a net472 64 bit execuable
+			//		- for some reason, UnityModManager didn't like the AssetStudio
+			//		  version for 6.0 or above; maybe because of folders within folders?
+			//	- add AssetStudio as a library
+			//	- wait till the altfuture eula releases
+
 			var process = new System.Diagnostics.Process();
 			process.StartInfo.FileName = "cmd.exe";
 			process.StartInfo.RedirectStandardInput = true;
@@ -150,14 +185,33 @@ namespace RearrangedS282
 			process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
 			process.Start();
-			string assetStudioCmd = $"{assetStudioPath} \"{importPathFull}\" -o \"{exportPathFull}\" -t mesh --filter-by-name \"s282_mech_wheels_connect\" --log-output file";
-			process.StandardInput.WriteLine(assetStudioCmd);
+			String incantation = $"{assetStudioPath + assetStudioEXEName} \"{importPathFull}\" " +
+				$"-o \"{exportPathFull}\" " +
+				$"-t mesh " +
+				$"--filter-by-name \"{meshName}\"";
+			process.StandardInput.WriteLine(incantation);
 			process.StandardInput.Flush();
 			process.StandardInput.Close();
 			process.WaitForExit();
-			Main.Logger.Log(process.StandardOutput.ReadToEnd());
+			//Main.Logger.Log(process.StandardOutput.ReadToEnd());
+		}
 
-			getSideRodMeshes();
+		//In previous versions of the mod, AssetStudio generated a bunch of log files. This cleans them up
+		private void clearAssetStudioLogs()
+		{
+			var process = new System.Diagnostics.Process();
+			process.StartInfo.FileName = "cmd";
+			process.StartInfo.RedirectStandardInput = true;
+			process.StartInfo.RedirectStandardOutput = true;
+			process.StartInfo.CreateNoWindow = true;
+			process.StartInfo.UseShellExecute = false;
+			process.Start();
+			String incantation = $"rm {modDLLFolderPath}\\AssetStudioModCLI_net472_win32_64\\*.log";
+			process.StandardInput.WriteLine(incantation);
+			process.StandardInput.Flush();
+			process.StandardInput.Close();
+			process.WaitForExit();
+			//Main.Logger.Log(process.StandardOutput.ReadToEnd());
 		}
 
 		//mark part of mesh, to be either kept or destroyed with deleteMarkedPartOfMesh or
@@ -238,10 +292,12 @@ namespace RearrangedS282
 
 		private void getSideRodMeshes()
 		{
-			Mesh sideRodMesh = new OBJLoader().Load(exportPathFull + "\\s282_mech_wheels_connect.obj");
+			generateMeshFromGameFiles(sideRodMeshName);
+
+			Mesh sideRodMesh = new OBJLoader().Load($"{exportPathFull}\\{sideRodMeshName}.obj");
 			if (sideRodMesh is null)
 			{
-				Main.Logger.Error($"MeshFinder can't find the mesh at {exportPathFull + "\\s282_mech_wheels_connect.obj"}");
+				Main.Logger.Error($"MeshFinder can't find the mesh at {exportPathFull}\\{sideRodMeshName}.obj");
 				return;
 			}
 
@@ -409,6 +465,77 @@ namespace RearrangedS282
 			FiveSixAxleSideRodMesh.RecalculateNormals();
 			FiveSixAxleSideRodMesh.RecalculateTangents();
 			FiveSixAxleSideRodMesh.RecalculateBounds();
+		}
+
+		private void getMainRodMesh()
+		{
+			generateMeshFromGameFiles(mainRodMeshName);
+
+			Mesh mainRodMesh = new OBJLoader().Load($"{exportPathFull}\\{mainRodMeshName}.obj");
+			if (mainRodMesh is null)
+			{
+				Main.Logger.Error($"MeshFinder can't find the mesh at {exportPathFull}\\{mainRodMeshName}.obj");
+				return;
+			}
+
+			DuplexMainRodMesh = UnityEngine.Object.Instantiate(mainRodMesh);
+			Vector3[] duplexMainRodVerts = DuplexMainRodMesh.vertices;
+			int[] duplexMainRodTris = DuplexMainRodMesh.triangles;
+			for (int i = 0; i < duplexMainRodVerts.Length; i++)
+			{
+				if (duplexMainRodVerts[i].z > 2)
+				{
+					duplexMainRodVerts[i] = new Vector3(duplexMainRodVerts[i].x, duplexMainRodVerts[i].y, duplexMainRodVerts[i].z - 1.52f);
+				}
+			}
+			DuplexMainRodMesh.vertices = duplexMainRodVerts;
+			DuplexMainRodMesh.RecalculateNormals();
+			DuplexMainRodMesh.RecalculateTangents();
+			DuplexMainRodMesh.RecalculateBounds();
+		}
+
+		internal static Mesh alterCrossheadGuideLMesh(Mesh mesh)
+		{
+			Mesh newMesh = UnityEngine.Object.Instantiate(mesh);
+			Vector3[] vertices = newMesh.vertices;
+			vertices[53] += new Vector3(0, 0.03f, 0);
+			vertices[65] += new Vector3(0, -0.03f, 0);
+			vertices[77] += new Vector3(0, 0.03f, 0);
+			vertices[89] += new Vector3(0, -0.03f, 0);
+			vertices[121] += new Vector3(0, -0.03f, 0);
+			vertices[122] += new Vector3(0, -0.03f, 0);
+			vertices[124] += new Vector3(0, 0.03f, 0);
+			vertices[127] += new Vector3(0, 0.03f, 0);
+
+			vertices[108] += new Vector3(0, 0, 0.11f);
+			vertices[109] += new Vector3(0, 0, 0.11f);
+			vertices[118] += new Vector3(0, 0, 0.11f);
+			vertices[119] += new Vector3(0, 0, 0.11f);
+
+			newMesh.vertices = vertices;
+			return newMesh;
+		}
+
+		internal static Mesh alterCrossheadGuideRMesh(Mesh mesh)
+		{
+			Mesh newMesh = UnityEngine.Object.Instantiate(mesh);
+			Vector3[] vertices = newMesh.vertices;
+			vertices[52] += new Vector3(0, 0.03f, 0);
+			vertices[64] += new Vector3(0, -0.03f, 0);
+			vertices[76] += new Vector3(0, 0.03f, 0);
+			vertices[88] += new Vector3(0, -0.03f, 0);
+			vertices[122] += new Vector3(0, -0.03f, 0);
+			vertices[123] += new Vector3(0, -0.03f, 0);
+			vertices[124] += new Vector3(0, 0.03f, 0);
+			vertices[125] += new Vector3(0, 0.03f, 0);
+
+			vertices[108] += new Vector3(0, 0, 0.11f);
+			vertices[109] += new Vector3(0, 0, 0.11f);
+			vertices[118] += new Vector3(0, 0, 0.11f);
+			vertices[119] += new Vector3(0, 0, 0.11f);
+
+			newMesh.vertices = vertices;
+			return newMesh;
 		}
 	}
 }

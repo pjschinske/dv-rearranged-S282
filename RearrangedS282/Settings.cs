@@ -35,7 +35,8 @@ namespace RearrangedS282
 
 		private const int HEIGHT = 12;
 
-		/*[Draw("Allow the S282's wheels to turn when destroyed:")] public bool explodedDrivetrainRotate = true;*/
+		//[Header("Derails")]
+		//[Draw("Wheel arrangement sensitivity to derailing:",Max)]
 
 		[Header("Reapply wheel arrangement to update")]
 		[Space(5)]

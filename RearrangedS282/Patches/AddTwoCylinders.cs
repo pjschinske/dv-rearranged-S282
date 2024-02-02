@@ -10,9 +10,9 @@ using System.Reflection.Emit;
 
 namespace RearrangedS282.Patches
 {
-	[HarmonyPatch(typeof(ReciprocatingSteamEngine),
+	/*[HarmonyPatch(typeof(ReciprocatingSteamEngine),
 				  MethodType.Constructor,
-				  new Type[] { typeof(ReciprocatingSteamEngineDefinition) })]
+				  new Type[] { typeof(ReciprocatingSteamEngineDefinition) })]*/
 	internal class AddTwoCylinders
 	{
 		static void Prefix(ReciprocatingSteamEngine __instance, ReciprocatingSteamEngineDefinition seDef)
@@ -24,7 +24,7 @@ namespace RearrangedS282.Patches
 		//numCylinders * 2
 		//Since we always want 4 beats, even on the 4 cylinder locomotives, we set this
 		//to numCylinders * 1, i.e. 4
-		static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+		/*static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
 			var codes = new List<CodeInstruction>(instructions);
 
@@ -38,7 +38,7 @@ namespace RearrangedS282.Patches
 			}
 
 			return codes.AsEnumerable();
-		}
+		}*/
 
 		private static void Postfix(ReciprocatingSteamEngine __instance, ReciprocatingSteamEngineDefinition seDef)
 		{

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AssemblyName>RearrangedS282</AssemblyName>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<LangVersion>9.0</LangVersion>
 		<!-- <Nullable>enable</Nullable> -->
 		<WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
@@ -14,6 +14,10 @@
 		<Reference Include="DV.ThingTypes">
 		</Reference>
 		<Reference Include="DV.Simulation">
+		</Reference>
+		<Reference Include="DV.BrakeSystem">
+		</Reference>
+		<Reference Include="DV.WeatherSystem">
 		</Reference>
 		<Reference Include="DV.Utils">
 		</Reference>
@@ -31,6 +35,7 @@
 		<Reference Include="UnityEngine.AnimationModule" />
 		<Reference Include="UnityEngine.AssetBundleModule" />
 		<Reference Include="UnityEngine.ParticleSystemModule" />
+		<Reference Include="Unity.TextMeshPro" />
 	</ItemGroup>
 
 	<!-- Mod Loader -->
@@ -43,6 +48,7 @@
 		<Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
 		<Publicize Include="DV.Simulation" IncludeCompilerGeneratedMembers="false" />
 		<PackageReference Include="UnityModManager" Version="0.27.2" />
+		<Reference Include="LocoMeshSplitter" />
 	</ItemGroup>
 	
 	<!-- Null Checking -->
