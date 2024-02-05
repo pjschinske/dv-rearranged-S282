@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RearrangedS282.Sim
+namespace RearrangedS282.Sim.SimDuplex
 {
 	internal class DuplexDrivingForce : MonoBehaviour
 	{
@@ -31,8 +31,8 @@ namespace RearrangedS282.Sim
 			wheelRadius = train.carLivery.parentType.wheelRadius;
 			if (!simFlow.TryGetPort(torqueGeneratedPortId, out torqueGeneratedPort))
 			{
-				Debug.LogError("[" + base.gameObject.GetPath() + "]: DrivingForce Sim won't apply any force.", this);
-				base.enabled = false;
+				Debug.LogError("[" + gameObject.GetPath() + "]: DrivingForce Sim won't apply any force.", this);
+				enabled = false;
 			}
 		}
 
@@ -52,10 +52,10 @@ namespace RearrangedS282.Sim
 					&& adhesionController.wheelslipController.wheelslip > 0f)
 				{
 					flag = true;
-					float totalBrakingForce = (
-						(!train.derailed)
-						? (train.Bogies[0].brakingForce * (float)train.Bogies.Length)
-						: (train.brakeSystem.brakingFactor * train.Bogies[0].maxBrakingForcePerKg * train.massController.TotalBogiesMass));
+					float totalBrakingForce =
+						!train.derailed
+						? train.Bogies[0].brakingForce * train.Bogies.Length
+						: train.brakeSystem.brakingFactor * train.Bogies[0].maxBrakingForcePerKg * train.massController.TotalBogiesMass;
 					forceGenerated = Mathf.Sign(forceGenerated) * Mathf.Clamp(Mathf.Abs(forceGenerated) - totalBrakingForce, 0f, float.PositiveInfinity);
 					forceGenerated *= adhesionController.wheelslipController.WheelslipForceReduceFactor;
 				}
@@ -70,7 +70,7 @@ namespace RearrangedS282.Sim
 				{
 					train.ForceOptimizationState(sleep: false);
 				}
-				float generatedForcePerBogie = forceGenerated / (float)train.Bogies.Length;
+				float generatedForcePerBogie = forceGenerated / train.Bogies.Length;
 				Bogie[] bogies = train.Bogies;
 				foreach (Bogie bogie in bogies)
 				{

@@ -9,10 +9,10 @@ using DV.Wheels;
 using LocoSim.Implementations;
 using UnityEngine;
 
-namespace RearrangedS282.Sim
+namespace RearrangedS282.Sim.SimDuplex
 {
-	internal class DuplexTractionPortsFeeder: TractionPortsFeeder
-    {
+	internal class DuplexTractionPortsFeeder : TractionPortsFeeder
+	{
 		internal AdhesionController adhesionController;
 
 		public new void Tick(float deltaTime)

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RearrangedS282.Sim
+namespace RearrangedS282.Sim.SimDuplex
 {
 	internal class DuplexAdhesionController : AdhesionController
 	{

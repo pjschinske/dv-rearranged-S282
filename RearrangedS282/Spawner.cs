@@ -31,10 +31,17 @@ namespace RearrangedS282
 			[HarmonyAfter(new string[] {"Gauge", "LocoMeshSplitter"})]
 			static void Postfix(ref TrainCar __instance)
 			{
-				if (__instance is not null
-					&& __instance.carType == TrainCarType.LocoSteamHeavy)
+				if (__instance is null)
 				{
-					__instance.gameObject.AddComponent<WheelRearranger>();
+					return;
+				}
+				if (__instance.carType == TrainCarType.LocoSteamHeavy)
+				{
+					__instance.gameObject.AddComponent<S282AWheelRearranger>();
+				}
+				else if (__instance.carType == TrainCarType.Tender)
+				{
+					__instance.gameObject.AddComponent<S282BWheelRearranger>();
 				}
 			}
 		}
@@ -179,7 +186,7 @@ namespace RearrangedS282
 			static void Postfix(ref ExplosionModelHandler __instance)
 			{
 				Transform loco = __instance.transform;
-				var wheelRearranger = __instance.gameObject.GetOrAddComponent<WheelRearranger>();
+				var wheelRearranger = __instance.gameObject.GetOrAddComponent<S282AWheelRearranger>();
 				wheelRearranger.SwitchWheelArrangement((int) wheelRearranger.currentWA);
 				//We hid these LODs earlier, but now they're useful again
 				loco.Find("Axle_F/bogie_car/[axle] 1/axleF_modelLOD1").gameObject.SetActive(true);

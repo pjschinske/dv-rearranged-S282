@@ -20,7 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RearrangedS282.Sim
+namespace RearrangedS282.Sim.SimDuplex
 {
 	//heavily inspired by SimController class in game files
 	internal class DuplexSimController : MonoBehaviour, ISimulationFlowProvider
@@ -75,7 +75,7 @@ namespace RearrangedS282.Sim
 			{
 				poweredWheels = GetComponentInChildren<PoweredWheelsManager>();
 			}*/
-			
+
 			/*if (particlesController == null)
 			{
 				particlesController = GetComponentInChildren<ParticlesPortReadersController>();
@@ -113,7 +113,7 @@ namespace RearrangedS282.Sim
 			train = trainCar;
 			if (train == null)
 			{
-				base.enabled = false;
+				enabled = false;
 				Debug.LogError("Unexpected state: SimController has no train! Can't function properly", this);
 				return;
 			}
@@ -121,7 +121,7 @@ namespace RearrangedS282.Sim
 			{
 				simFlow = new SimulationFlow(connectionsDefinition, Globals.G.GameParams.SimParams);
 			}
-			base.gameObject.AddComponent<SimCarStateSave>().Initialize(simFlow, damageController, train.muModule);
+			gameObject.AddComponent<SimCarStateSave>().Initialize(simFlow, damageController, train.muModule);
 			resourceContainerController = new ResourceContainerController(simFlow);
 			/*
 			if (particlesController != null)

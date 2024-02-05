@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RearrangedS282.Sim
+namespace RearrangedS282.Sim.SimDuplex
 {
-	internal class DuplexReciprocatingSteamEngineDefinition: ReciprocatingSteamEngineDefinition
+	internal class DuplexReciprocatingSteamEngineDefinition : ReciprocatingSteamEngineDefinition
 	{
 		public override SimComponent InstantiateImplementation()
 		{

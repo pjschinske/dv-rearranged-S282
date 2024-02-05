@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RearrangedS282
 {
-	public enum WheelArrangementType
+	public enum S282AWheelArrangementType
 	{
 		//s240 = 0,
 		s440 = 0,
@@ -49,6 +49,12 @@ namespace RearrangedS282
 		s4664*/
 	}
 
+	public enum S282BWheelArrangementType
+	{
+		vanilla = 0,
+		booster,
+	}
+
 	public static class WheelArrangement
 	{
 		//The idea here is that the values of the enum WheelArrangementType can be
@@ -56,7 +62,7 @@ namespace RearrangedS282
 		//Ideally I would have used an enum with a string value (like in Rust), or
 		//a union (like in C or C++), but C# doesn't support either.
 
-		public static readonly string[] WheelArrangementNames =
+		public static readonly string[] S282AWheelArrangementNames =
 		{
 			"4-4-0 American",
 			"4-4-2 Atlantic",
@@ -97,7 +103,13 @@ namespace RearrangedS282
 			"4-6-6-4 Challenger"*/
 		};
 
-		public static readonly float[] NumOfNondrivenWheels =
+		public static readonly string[] S282BWheelArrangementNames =
+		{
+			"Regular tender",
+			"Tender with booster",
+		};
+
+		public static readonly float[] S282ANumOfNondrivenWheels =
 		{
 			4,//"4-4-0 American",
 			6,//"4-4-2 Atlantic",
@@ -133,6 +145,12 @@ namespace RearrangedS282
 			4,//"2-4-4-2",
 			8,//"4-4-4-4",
 			8,//"4-0-4",
+		};
+
+		public static readonly float[] S282BNumOfNondrivenWheels =
+		{
+			4,//"Regular tender",
+			2,//"Tender with booster",
 		};
 	}
 }

@@ -23,17 +23,17 @@ using LocoMeshSplitter.MeshLoaders;
 using DV.Simulation.Controllers;
 using static DV.Simulation.Controllers.CylinderCockParticlePortReader;
 using static DV.Wheels.PoweredWheelRotationViaAnimation;
-using RearrangedS282.Sim;
 using DV.Damage;
 using UnityEngine.Events;
 using DV;
 using System.Runtime.ConstrainedExecution;
+using RearrangedS282.Sim.SimDuplex;
 
 //abandon all hope ye who enter here
 
 namespace RearrangedS282
 {
-	internal class WheelRearranger : MonoBehaviour
+	internal class S282AWheelRearranger : MonoBehaviour
 	{
 		private TrainCar loco;
 		private S282AMeshLoader splitS282A;
@@ -264,7 +264,7 @@ namespace RearrangedS282
 
 		private static readonly Random rand = new();
 
-		public WheelArrangementType currentWA
+		public S282AWheelArrangementType currentWA
 		{get; private set; }
 
 		private float derailModifier;
@@ -281,12 +281,12 @@ namespace RearrangedS282
 
 			if (loco == null )
 			{
-				Main.Logger.Error("WheelRearranger initialized on something that isn't a train car");
+				Main.Logger.Error("S282AWheelRearranger initialized on something that isn't a train car");
 				return;
 			}
 			if (loco.carType != TrainCarType.LocoSteamHeavy)
 			{
-				Main.Logger.Error("WheelRearranger initialized on something that isn't an S282");
+				Main.Logger.Error("A282AWheelRearranger initialized on something that isn't an S282A");
 				return;
 			}
 
@@ -310,7 +310,7 @@ namespace RearrangedS282
 			}
 			else
 			{
-				SwitchWheelArrangement((int)WheelArrangementType.s282);
+				SwitchWheelArrangement((int)S282AWheelArrangementType.s282);
 			}
 		}
 
@@ -1291,15 +1291,15 @@ namespace RearrangedS282
 				Start();
 			}
 
-			WheelArrangementType oldWA = currentWA;
+			S282AWheelArrangementType oldWA = currentWA;
 
-			WheelArrangementType waType = (WheelArrangementType)wa;
+			S282AWheelArrangementType waType = (S282AWheelArrangementType)wa;
 			currentWA = waType;
 
 			Main.Logger.Log($"Switching an S282 from {oldWA} to {waType}");
 
-			derailModifier = (WheelArrangement.NumOfNondrivenWheels[(int)currentWA]
-				- WheelArrangement.NumOfNondrivenWheels[(int)WheelArrangementType.s282])
+			derailModifier = (WheelArrangement.S282ANumOfNondrivenWheels[(int)currentWA]
+				- WheelArrangement.S282ANumOfNondrivenWheels[(int)S282AWheelArrangementType.s282])
 				/ 10.0f;
 			Main.Logger.Log("Derail Modifier: " + derailModifier);
 
@@ -1315,13 +1315,13 @@ namespace RearrangedS282
 			//we forget.
 			switch (oldWA)
 			{
-				case WheelArrangementType.s080:
-				case WheelArrangementType.s082:
-				case WheelArrangementType.s084:
-				case WheelArrangementType.s0100:
-				case WheelArrangementType.s0102:
-				case WheelArrangementType.s0104:
-				case WheelArrangementType.s0120:
+				case S282AWheelArrangementType.s080:
+				case S282AWheelArrangementType.s082:
+				case S282AWheelArrangementType.s084:
+				case S282AWheelArrangementType.s0100:
+				case S282AWheelArrangementType.s0102:
+				case S282AWheelArrangementType.s0104:
+				case S282AWheelArrangementType.s0120:
 					splitS282A.MovePilot(new Vector2(0, 0.47f));
 					frontHandrail.gameObject.SetActive(true);
 					break;
@@ -1330,50 +1330,50 @@ namespace RearrangedS282
 			//select leading axle configuration
 			switch (waType)
 			{
-				case WheelArrangementType.s080:
-				case WheelArrangementType.s082:
-				case WheelArrangementType.s084:
-				case WheelArrangementType.s0100:
-				case WheelArrangementType.s0102:
-				case WheelArrangementType.s0104:
-				case WheelArrangementType.s0120:
+				case S282AWheelArrangementType.s080:
+				case S282AWheelArrangementType.s082:
+				case S282AWheelArrangementType.s084:
+				case S282AWheelArrangementType.s0100:
+				case S282AWheelArrangementType.s0102:
+				case S282AWheelArrangementType.s0104:
+				case S282AWheelArrangementType.s0120:
 					splitS282A.MovePilot(new Vector2(0, -0.47f));
 					frontHandrail.gameObject.SetActive(false);
 					break;
-				case WheelArrangementType.s280:
-				case WheelArrangementType.s282:
-				case WheelArrangementType.s284:
-				case WheelArrangementType.s280Big:
-				case WheelArrangementType.s282Big:
-				case WheelArrangementType.s284Big:
-				case WheelArrangementType.s2100:
-				case WheelArrangementType.s2102:
-				case WheelArrangementType.s2104:
-				case WheelArrangementType.s2120:
-				case WheelArrangementType.s2122:
-				case WheelArrangementType.s2442:
+				case S282AWheelArrangementType.s280:
+				case S282AWheelArrangementType.s282:
+				case S282AWheelArrangementType.s284:
+				case S282AWheelArrangementType.s280Big:
+				case S282AWheelArrangementType.s282Big:
+				case S282AWheelArrangementType.s284Big:
+				case S282AWheelArrangementType.s2100:
+				case S282AWheelArrangementType.s2102:
+				case S282AWheelArrangementType.s2104:
+				case S282AWheelArrangementType.s2120:
+				case S282AWheelArrangementType.s2122:
+				case S282AWheelArrangementType.s2442:
 					ShowTwoLeadingWheels();
 					break;
-				case WheelArrangementType.s4100:
-				case WheelArrangementType.s4102:
-				case WheelArrangementType.s4104:
-				case WheelArrangementType.s4122:
+				case S282AWheelArrangementType.s4100:
+				case S282AWheelArrangementType.s4102:
+				case S282AWheelArrangementType.s4104:
+				case S282AWheelArrangementType.s4122:
 				//case WheelArrangementType.s4664:
 					ShowFourLeadingWheels();
 					break;
-				case WheelArrangementType.s4444:
+				case S282AWheelArrangementType.s4444:
 					ShowFourLeadingWheels4444();
 					break;
-				case WheelArrangementType.s404:
-				case WheelArrangementType.s440:
-				case WheelArrangementType.s442:
-				case WheelArrangementType.s444:
-				case WheelArrangementType.s460:
-				case WheelArrangementType.s462:
-				case WheelArrangementType.s464:
-				case WheelArrangementType.s480:
-				case WheelArrangementType.s482:
-				case WheelArrangementType.s484:
+				case S282AWheelArrangementType.s404:
+				case S282AWheelArrangementType.s440:
+				case S282AWheelArrangementType.s442:
+				case S282AWheelArrangementType.s444:
+				case S282AWheelArrangementType.s460:
+				case S282AWheelArrangementType.s462:
+				case S282AWheelArrangementType.s464:
+				case S282AWheelArrangementType.s480:
+				case S282AWheelArrangementType.s482:
+				case S282AWheelArrangementType.s484:
 					ShowProper4LeadingWheels();
 					break;
 				default:
@@ -1383,62 +1383,62 @@ namespace RearrangedS282
 			//select drive axle configuration
 			switch (waType)
 			{
-				case WheelArrangementType.s404:
+				case S282AWheelArrangementType.s404:
 					ShowNoDrivers();
 					break;
-				case WheelArrangementType.s440:
-				case WheelArrangementType.s442:
-				case WheelArrangementType.s444:
+				case S282AWheelArrangementType.s440:
+				case S282AWheelArrangementType.s442:
+				case S282AWheelArrangementType.s444:
 					Show4Drivers();
 					break;
-				case WheelArrangementType.s460:
-				case WheelArrangementType.s462:
-				case WheelArrangementType.s464:
+				case S282AWheelArrangementType.s460:
+				case S282AWheelArrangementType.s462:
+				case S282AWheelArrangementType.s464:
 					Show6Drivers();
 					break;
-				case WheelArrangementType.s280Big:
-				case WheelArrangementType.s282Big:
-				case WheelArrangementType.s284Big:
+				case S282AWheelArrangementType.s280Big:
+				case S282AWheelArrangementType.s282Big:
+				case S282AWheelArrangementType.s284Big:
 					Show8BigDrivers();
 					break;
-				case WheelArrangementType.s080:
-				case WheelArrangementType.s082:
-				case WheelArrangementType.s084:
-				case WheelArrangementType.s280:
-				case WheelArrangementType.s282:
-				case WheelArrangementType.s284:
+				case S282AWheelArrangementType.s080:
+				case S282AWheelArrangementType.s082:
+				case S282AWheelArrangementType.s084:
+				case S282AWheelArrangementType.s280:
+				case S282AWheelArrangementType.s282:
+				case S282AWheelArrangementType.s284:
 					if (!Main.settings.show8CoupledValveGear)
 					{
 						HideValveGear();
 					}
 					break;
-				case WheelArrangementType.s480:
-				case WheelArrangementType.s482:
-				case WheelArrangementType.s484:
+				case S282AWheelArrangementType.s480:
+				case S282AWheelArrangementType.s482:
+				case S282AWheelArrangementType.s484:
 					Show8RearDrivers();
 					break;
-				case WheelArrangementType.s0100:
-				case WheelArrangementType.s0102:
-				case WheelArrangementType.s0104:
-				case WheelArrangementType.s2100:
-				case WheelArrangementType.s2102:
-				case WheelArrangementType.s2104:
-				case WheelArrangementType.s4100:
-				case WheelArrangementType.s4102:
-				case WheelArrangementType.s4104:
+				case S282AWheelArrangementType.s0100:
+				case S282AWheelArrangementType.s0102:
+				case S282AWheelArrangementType.s0104:
+				case S282AWheelArrangementType.s2100:
+				case S282AWheelArrangementType.s2102:
+				case S282AWheelArrangementType.s2104:
+				case S282AWheelArrangementType.s4100:
+				case S282AWheelArrangementType.s4102:
+				case S282AWheelArrangementType.s4104:
 					Show10Drivers();
 					break;
-				case WheelArrangementType.s0120:
-				case WheelArrangementType.s2120:
-				case WheelArrangementType.s2122:
-				case WheelArrangementType.s4122:
+				case S282AWheelArrangementType.s0120:
+				case S282AWheelArrangementType.s2120:
+				case S282AWheelArrangementType.s2122:
+				case S282AWheelArrangementType.s4122:
 					Show12SmallDrivers();
 					break;
-				case WheelArrangementType.s2442:
+				case S282AWheelArrangementType.s2442:
 					ShowDuplex();
 					Show2442Duplex();
 					break;
-				case WheelArrangementType.s4444:
+				case S282AWheelArrangementType.s4444:
 					ShowDuplex();
 					Show4444Duplex();
 					break;
@@ -1450,7 +1450,7 @@ namespace RearrangedS282
 			switch (waType)
 			{
 			//two trailing wheels:
-				case WheelArrangementType.s442:
+				case S282AWheelArrangementType.s442:
 					switch (Main.settings.x42Options)
 					{
 						case Settings.X82Options.vanilla:
@@ -1464,7 +1464,7 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s462:
+				case S282AWheelArrangementType.s462:
 					switch (Main.settings.x62Options)
 					{
 						case Settings.X102Options.vanilla:
@@ -1475,8 +1475,8 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s082:
-				case WheelArrangementType.s282:
+				case S282AWheelArrangementType.s082:
+				case S282AWheelArrangementType.s282:
 					switch (Main.settings.x82Options)
 					{
 						case Settings.X82Options.vanilla:
@@ -1490,7 +1490,7 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s282Big: //don't want the alternate position for S282Big
+				case S282AWheelArrangementType.s282Big: //don't want the alternate position for S282Big
 					switch (Main.settings.x82Options)
 					{
 						case Settings.X82Options.vanilla:
@@ -1501,7 +1501,7 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s482:
+				case S282AWheelArrangementType.s482:
 					switch (Main.settings.x82Options)
 					{
 						case Settings.X82Options.vanilla:
@@ -1512,9 +1512,9 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s0102:
-				case WheelArrangementType.s2102:
-				case WheelArrangementType.s4102:
+				case S282AWheelArrangementType.s0102:
+				case S282AWheelArrangementType.s2102:
+				case S282AWheelArrangementType.s4102:
 					switch (Main.settings.x102Options)
 					{
 						case Settings.X102Options.vanilla:
@@ -1525,30 +1525,30 @@ namespace RearrangedS282
 							break;
 					}
 					break;
-				case WheelArrangementType.s2122:
-				case WheelArrangementType.s4122:
-				case WheelArrangementType.s2442:
+				case S282AWheelArrangementType.s2122:
+				case S282AWheelArrangementType.s4122:
+				case S282AWheelArrangementType.s2442:
 					ShowTwoTrailingWheelsFor12Coupled();
 					break;
 
 				//four trailing wheels:
-				case WheelArrangementType.s444:
+				case S282AWheelArrangementType.s444:
 					ShowFourTrailingWheelsFor4Coupled();
 					break;
-				case WheelArrangementType.s404:
-				case WheelArrangementType.s084:
-				case WheelArrangementType.s284:
+				case S282AWheelArrangementType.s404:
+				case S282AWheelArrangementType.s084:
+				case S282AWheelArrangementType.s284:
 					ShowFourTrailingWheels();
 					break;
-				case WheelArrangementType.s284Big:
+				case S282AWheelArrangementType.s284Big:
 					ShowFourTrailingWheelsForBig8Coupled();
 					break;
-				case WheelArrangementType.s464:
-				case WheelArrangementType.s484:
-				case WheelArrangementType.s0104:
-				case WheelArrangementType.s2104:
-				case WheelArrangementType.s4104:
-				case WheelArrangementType.s4444:
+				case S282AWheelArrangementType.s464:
+				case S282AWheelArrangementType.s484:
+				case S282AWheelArrangementType.s0104:
+				case S282AWheelArrangementType.s2104:
+				case S282AWheelArrangementType.s4104:
+				case S282AWheelArrangementType.s4444:
 					ShowFourTrailingWheelsFor10Coupled();
 					break;
 				default:

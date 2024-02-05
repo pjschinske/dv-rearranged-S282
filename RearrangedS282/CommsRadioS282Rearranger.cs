@@ -319,7 +319,7 @@ namespace RearrangedS282
 				selectedWheelArrangement--;
 				if (selectedWheelArrangement == -1)
 				{
-					selectedWheelArrangement = WheelArrangement.WheelArrangementNames.Length - 1;
+					selectedWheelArrangement = WheelArrangement.S282AWheelArrangementNames.Length - 1;
 				}
 				SetSelectedWheelArrangement(selectedWheelArrangement);
 				return true;
@@ -336,7 +336,7 @@ namespace RearrangedS282
 			if (CurrentState == State.SelectWheelArrangement)
 			{
 				selectedWheelArrangement++;
-				if (selectedWheelArrangement >= WheelArrangement.WheelArrangementNames.Length)
+				if (selectedWheelArrangement >= WheelArrangement.S282AWheelArrangementNames.Length)
 				{
 					selectedWheelArrangement = 0;
 				}
@@ -356,7 +356,7 @@ namespace RearrangedS282
 
 		private void ApplySelectedWheelArrangement()
 		{
-			if (selectedWheelArrangement < 0 || selectedWheelArrangement > WheelArrangement.WheelArrangementNames.Length)
+			if (selectedWheelArrangement < 0 || selectedWheelArrangement > WheelArrangement.S282AWheelArrangementNames.Length)
 			{
 				Main.Logger.Error("Tried to select out-of-bounds wheel arrangement");
 				return;
@@ -370,13 +370,13 @@ namespace RearrangedS282
 				Main.Logger.Error("Tried to rearrange something that wasn't an S282");
 			}
 
-			SelectedCar.GetOrAddComponent<WheelRearranger>()
+			SelectedCar.GetOrAddComponent<S282AWheelRearranger>()
 				.SwitchWheelArrangement(selectedWheelArrangement);
 		}
 
 		private void SetSelectedWheelArrangement(int wa)
 		{
-			string selectedWheelArrangement = WheelArrangement.WheelArrangementNames[wa];
+			string selectedWheelArrangement = WheelArrangement.S282AWheelArrangementNames[wa];
 			display.SetContent($"Select Wheel Arrangement:\n{selectedWheelArrangement}");
 		}
 

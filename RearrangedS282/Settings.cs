@@ -89,7 +89,7 @@ namespace RearrangedS282
 		[Draw("Randomly spawn 2-4-4-2:", Height = HEIGHT)] public bool spawn2442 = true;
 		[Draw("Randomly spawn 4-4-4-4:", Height = HEIGHT)] public bool spawn4444 = true;
 
-		public List<WheelArrangementType> RandomWAs;
+		public List<S282AWheelArrangementType> RandomWAs;
 
 		public override void Save(UnityModManager.ModEntry modEntry)
 		{
@@ -99,81 +99,81 @@ namespace RearrangedS282
 		public void OnChange() {
 			RandomWAs = new();
 			if (spawn440)
-				RandomWAs.Add(WheelArrangementType.s440);
+				RandomWAs.Add(S282AWheelArrangementType.s440);
 			if (spawn442)
-				RandomWAs.Add(WheelArrangementType.s442);
+				RandomWAs.Add(S282AWheelArrangementType.s442);
 			if (spawn444)
-				RandomWAs.Add(WheelArrangementType.s444);
+				RandomWAs.Add(S282AWheelArrangementType.s444);
 
 			if (spawn460)
-				RandomWAs.Add(WheelArrangementType.s460);
+				RandomWAs.Add(S282AWheelArrangementType.s460);
 			if (spawn462)
-				RandomWAs.Add(WheelArrangementType.s462);
+				RandomWAs.Add(S282AWheelArrangementType.s462);
 
 			//EIGHT COUPLED
 
 			if (spawn080)
-				RandomWAs.Add(WheelArrangementType.s080);
+				RandomWAs.Add(S282AWheelArrangementType.s080);
 			if (spawn082)
-				RandomWAs.Add(WheelArrangementType.s082);
+				RandomWAs.Add(S282AWheelArrangementType.s082);
 			if (spawn084)
-				RandomWAs.Add(WheelArrangementType.s084);
+				RandomWAs.Add(S282AWheelArrangementType.s084);
 
 			if (spawn280)
-				RandomWAs.Add(WheelArrangementType.s280);
+				RandomWAs.Add(S282AWheelArrangementType.s280);
 			if (spawn282)
-				RandomWAs.Add(WheelArrangementType.s282);
+				RandomWAs.Add(S282AWheelArrangementType.s282);
 			if (spawn282Big)
-				RandomWAs.Add(WheelArrangementType.s282Big);
+				RandomWAs.Add(S282AWheelArrangementType.s282Big);
 			if (spawn284)
-				RandomWAs.Add(WheelArrangementType.s284);
+				RandomWAs.Add(S282AWheelArrangementType.s284);
 
 			if (spawn480)
-				RandomWAs.Add(WheelArrangementType.s480);
+				RandomWAs.Add(S282AWheelArrangementType.s480);
 			if (spawn482)
-				RandomWAs.Add(WheelArrangementType.s482);
+				RandomWAs.Add(S282AWheelArrangementType.s482);
 			if (spawn484)
-				RandomWAs.Add(WheelArrangementType.s484);
+				RandomWAs.Add(S282AWheelArrangementType.s484);
 
 			//TEN COUPLED
 
 			if (spawn0100)
-				RandomWAs.Add(WheelArrangementType.s080);
+				RandomWAs.Add(S282AWheelArrangementType.s080);
 			if (spawn0102)
-				RandomWAs.Add(WheelArrangementType.s082);
+				RandomWAs.Add(S282AWheelArrangementType.s082);
 			if (spawn0104)
-				RandomWAs.Add(WheelArrangementType.s084);
+				RandomWAs.Add(S282AWheelArrangementType.s084);
 
 			if (spawn2100)
-				RandomWAs.Add(WheelArrangementType.s280);
+				RandomWAs.Add(S282AWheelArrangementType.s280);
 			if (spawn2102)
-				RandomWAs.Add(WheelArrangementType.s282);
+				RandomWAs.Add(S282AWheelArrangementType.s282);
 			if (spawn2104)
-				RandomWAs.Add(WheelArrangementType.s284);
+				RandomWAs.Add(S282AWheelArrangementType.s284);
 
 			if (spawn4100)
-				RandomWAs.Add(WheelArrangementType.s480);
+				RandomWAs.Add(S282AWheelArrangementType.s480);
 			if (spawn4102)
-				RandomWAs.Add(WheelArrangementType.s482);
+				RandomWAs.Add(S282AWheelArrangementType.s482);
 			if (spawn4104)
-				RandomWAs.Add(WheelArrangementType.s484);
+				RandomWAs.Add(S282AWheelArrangementType.s484);
 
 			//TWELVE COUPLED
 
 			if (spawn0120)
-				RandomWAs.Add(WheelArrangementType.s0120);
+				RandomWAs.Add(S282AWheelArrangementType.s0120);
 			if (spawn2120)
-				RandomWAs.Add(WheelArrangementType.s2120);
+				RandomWAs.Add(S282AWheelArrangementType.s2120);
 			if (spawn2122)
-				RandomWAs.Add(WheelArrangementType.s2122);
+				RandomWAs.Add(S282AWheelArrangementType.s2122);
 			if (spawn4122)
-				RandomWAs.Add(WheelArrangementType.s4122);
+				RandomWAs.Add(S282AWheelArrangementType.s4122);
 
 			//DUPLEX
 			if (spawn2442)
-				RandomWAs.Add(WheelArrangementType.s2442);
+				RandomWAs.Add(S282AWheelArrangementType.s2442);
 			if (spawn4444)
-				RandomWAs.Add(WheelArrangementType.s4444);
+				RandomWAs.Add(S282AWheelArrangementType.s4444);
 		}
 	}
 }

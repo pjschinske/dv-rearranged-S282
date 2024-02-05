@@ -27,7 +27,7 @@ namespace RearrangedS282.Patches
 
 				MethodInfo getComponent = typeof(TrainCar)
 					.GetMethod(nameof(TrainCar.GetComponent), new Type[]{})
-					.MakeGenericMethod(typeof(WheelRearranger));
+					.MakeGenericMethod(typeof(S282AWheelRearranger));
 				CodeInstruction[] newCodes =
 				{
 					new(OpCodes.Ldarg_0),
@@ -37,7 +37,7 @@ namespace RearrangedS282.Patches
 					new(OpCodes.Callvirt, getComponent),
 					new(OpCodes.Dup),
 					new(OpCodes.Brfalse, ifNoWheelArranger),
-					new(OpCodes.Callvirt, typeof(WheelRearranger).GetMethod(nameof(WheelRearranger.GetDerailModifier))),
+					new(OpCodes.Callvirt, typeof(S282AWheelRearranger).GetMethod(nameof(S282AWheelRearranger.GetDerailModifier))),
 					new(OpCodes.Add),
 					new(OpCodes.Br, endOfPatch),
 					new(OpCodes.Pop)
