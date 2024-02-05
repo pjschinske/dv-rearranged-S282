@@ -129,7 +129,7 @@ namespace RearrangedS282.Patches
 					PortReferenceConnection pfc = oldSimCtrlr.connectionsDefinition.portReferenceConnections[i];
 					if (pfc.portReferenceId == "steamConsumptionCalculator.ENGINE")
 					{
-						pfc.portId = "duplexSteamEngine.STEAM_FLOW";
+						pfc.portId = "duplexExhaustCollector.STEAM_FLOW";
 					}
 					else if (pfc.portReferenceId == "exhaust.EXHAUST_FLOW")
 					{
