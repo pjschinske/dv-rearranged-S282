@@ -30,7 +30,7 @@ namespace RearrangedS282.Sim
 			//for the other engine as well. So the other AdhesionController gets changed
 			//in WheelArranger.
 			wheelslipFrictionCoef = car.carLivery.parentType.WheelslipFrictionCoef * 0.55f;
-			wheelSlideFrictionCoef = car.carLivery.parentType.WheelSlideFrictionCoef * 0.55f;
+			wheelSlideFrictionCoef = car.carLivery.parentType.WheelSlideFrictionCoef * 1.1f;
 		}
 	}
 }

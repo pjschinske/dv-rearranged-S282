@@ -2722,7 +2722,7 @@ namespace RearrangedS282
 			steamEngine.maxCutoff = 0.75f;
 
 			//See DuplexAdhesionController for the reason why this exists
-			loco.adhesionController.wheelSlideFrictionCoef = loco.carLivery.parentType.WheelSlideFrictionCoef * 0.5f;
+			loco.adhesionController.wheelSlideFrictionCoef = loco.carLivery.parentType.WheelSlideFrictionCoef * 1f;
 			loco.adhesionController.wheelslipFrictionCoef = loco.carLivery.parentType.WheelslipFrictionCoef * 0.5f;
 
 			//Re-enable rear engine
