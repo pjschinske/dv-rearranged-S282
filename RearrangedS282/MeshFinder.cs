@@ -26,7 +26,7 @@ namespace RearrangedS282
 		private static readonly String assetStudioPath = @".\Mods\RearrangedS282\AssetStudioModCLI_net472_win32_64\";
 		private static readonly String assetStudioEXEName = "AssetStudioModCLI.exe";
 		private static readonly String importPath = @"DerailValley_Data\resources.assets";
-		private static readonly String exportPath = @"mods\RearrangedS282\assets";
+		private static readonly String exportPath = @"Mods\RearrangedS282\assets";
 		private static readonly String importPathFull = System.IO.Path.GetFullPath(importPath);
 		private static readonly String exportPathFull = System.IO.Path.GetFullPath(exportPath);
 		private static readonly String sideRodMeshName = "s282_mech_wheels_connect";
@@ -150,9 +150,14 @@ namespace RearrangedS282
 
 		public MeshFinder()
 		{
-			clearAssetStudioLogs();
+			Main.Logger.Log("modDLLPath: " + modDLLPath);
+			Main.Logger.Log("modDLLFolderPath: " + modDLLFolderPath);
+			Main.Logger.Log("importPathFull: " + importPathFull);
+			Main.Logger.Log("exportPathFull: " + exportPathFull);
+
 			getSideRodMeshes();
 			getMainRodMesh();
+			clearAssetStudioLogs();
 
 			UnityEngine.Object.DontDestroyOnLoad(TwoAxleSideRodMesh);
             UnityEngine.Object.DontDestroyOnLoad(ThreeAxleSideRodMesh);
@@ -200,13 +205,14 @@ namespace RearrangedS282
 		private void clearAssetStudioLogs()
 		{
 			var process = new System.Diagnostics.Process();
-			process.StartInfo.FileName = "cmd";
+			process.StartInfo.FileName = "cmd.exe";
 			process.StartInfo.RedirectStandardInput = true;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
 			process.Start();
 			String incantation = $"rm {modDLLFolderPath}\\AssetStudioModCLI_net472_win32_64\\*.log";
+			Main.Logger.Log(incantation);
 			process.StandardInput.WriteLine(incantation);
 			process.StandardInput.Flush();
 			process.StandardInput.Close();
