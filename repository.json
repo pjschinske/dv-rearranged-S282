@@ -4,6 +4,11 @@
     [
         {
             "Id": "RearrangedS282",
+            "Version": "1.2.7",
+            "DownloadUrl": "https://github.com/pjschinske/dv-rearranged-S282/releases/download/v1.2.7/RearrangedS282_v1.2.7.zip"
+        },
+        {
+            "Id": "RearrangedS282",
             "Version": "1.2.3",
             "DownloadUrl": "https://github.com/pjschinske/dv-rearranged-S282/releases/download/v1.2.3/RearrangedS282_v1.2.3.zip"
         },
