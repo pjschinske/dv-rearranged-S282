@@ -56,8 +56,10 @@ namespace RearrangedS282.Sim.SimDuplex
 						!train.derailed
 						? train.Bogies[0].brakingForce * train.Bogies.Length
 						: train.brakeSystem.brakingFactor * train.Bogies[0].maxBrakingForcePerKg * train.massController.TotalBogiesMass;
-					forceGenerated = Mathf.Sign(forceGenerated) * Mathf.Clamp(Mathf.Abs(forceGenerated) - totalBrakingForce, 0f, float.PositiveInfinity);
-					forceGenerated *= adhesionController.wheelslipController.WheelslipForceReduceFactor;
+					forceGenerated = Mathf.Clamp(
+						forceGenerated,
+						0f - adhesionController.wheelslipController.TotalForceLimit,
+						adhesionController.wheelslipController.TotalForceLimit);
 				}
 			}
 			if (forceGenerated == 0f)

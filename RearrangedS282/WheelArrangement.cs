@@ -43,9 +43,9 @@ namespace RearrangedS282
 		s4122,
 		s2442,
 		s4444,
+		s2662,
 		s404,
-		/*s2662,
-		s2680,
+		/*s2680,
 		s4664*/
 	}
 
@@ -97,6 +97,7 @@ namespace RearrangedS282
 			"4-12-2 Union Pacific",
 			"2-4-4-2 Duplex",
 			"4-4-4-4 Duplex",
+			"2-6-6-2 Mallet",
 			"4-0-4 Drivers not found",
 			/*"2-6-6-2",
 			"2-6-8-0",
@@ -144,6 +145,7 @@ namespace RearrangedS282
 			6,//"4-12-2 Union Pacific",
 			4,//"2-4-4-2",
 			8,//"4-4-4-4",
+			4,//"2-4-4-2",
 			8,//"4-0-4",
 		};
 

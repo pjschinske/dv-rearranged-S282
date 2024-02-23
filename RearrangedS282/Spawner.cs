@@ -41,7 +41,7 @@ namespace RearrangedS282
 				}
 				else if (__instance.carType == TrainCarType.Tender)
 				{
-					__instance.gameObject.AddComponent<S282BWheelRearranger>();
+					//__instance.gameObject.AddComponent<S282BWheelRearranger>();
 				}
 			}
 		}
