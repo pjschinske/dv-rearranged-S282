@@ -23,7 +23,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (branchPipe is null)
+				if (branchPipe == null)
 				{
 					loadAssets();
 				}
@@ -36,7 +36,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (branchPipe4444 is null)
+				if (branchPipe4444 == null)
 				{
 					loadAssets();
 				}
@@ -49,7 +49,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBValveGear is null)
+				if (franklinBValveGear == null)
 				{
 					loadAssets();
 				}
@@ -62,7 +62,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBValveGear4444 is null)
+				if (franklinBValveGear4444 == null)
 				{
 					loadAssets();
 				}
@@ -75,7 +75,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBReverseGear is null)
+				if (franklinBReverseGear == null)
 				{
 					loadAssets();
 				}
@@ -88,7 +88,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBReverseGear4444 is null)
+				if (franklinBReverseGear4444 == null)
 				{
 					loadAssets();
 				}
@@ -101,7 +101,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBReverseGearRear is null)
+				if (franklinBReverseGearRear == null)
 				{
 					loadAssets();
 				}
@@ -114,7 +114,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBAnimCtrl is null)
+				if (franklinBAnimCtrl == null)
 				{
 					loadAssets();
 				}
@@ -127,7 +127,7 @@ namespace RearrangedS282
 		{
 			get
 			{
-				if (franklinBAnimCtrl4444 is null)
+				if (franklinBAnimCtrl4444 == null)
 				{
 					loadAssets();
 				}
@@ -199,13 +199,14 @@ namespace RearrangedS282
 				Main.Logger.Error("Failed to load franklin_type_b_anim_4444 in drivetrain assetbundle");
 			}
 
-			Object.DontDestroyOnLoad(branchPipe);
-			Object.DontDestroyOnLoad(branchPipe4444);
-			Object.DontDestroyOnLoad(franklinBValveGear);
-			Object.DontDestroyOnLoad(franklinBValveGear4444);
-			Object.DontDestroyOnLoad(franklinBReverseGear);
-			Object.DontDestroyOnLoad(franklinBReverseGear4444);
-			Object.DontDestroyOnLoad(franklinBReverseGearRear);
+			//These don't actually do anything for some reason. IDK why but it's really annoying
+			Object.DontDestroyOnLoad(branchPipe.transform.root.gameObject);
+			Object.DontDestroyOnLoad(branchPipe4444.transform.root.gameObject);
+			Object.DontDestroyOnLoad(franklinBValveGear.transform.root.gameObject);
+			Object.DontDestroyOnLoad(franklinBValveGear4444.transform.root.gameObject);
+			Object.DontDestroyOnLoad(franklinBReverseGear.transform.root.gameObject);
+			Object.DontDestroyOnLoad(franklinBReverseGear4444.transform.root.gameObject);
+			Object.DontDestroyOnLoad(franklinBReverseGearRear.transform.root.gameObject);
 			Object.DontDestroyOnLoad(franklinBAnimCtrl);
 			Object.DontDestroyOnLoad(franklinBAnimCtrl4444);
 

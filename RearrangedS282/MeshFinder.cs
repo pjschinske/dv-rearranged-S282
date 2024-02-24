@@ -22,7 +22,7 @@ namespace RearrangedS282
 			get { return _instance ??= new MeshFinder(); }
 		}
 		private static readonly String dvFolderPath = Directory.GetParent(Path.GetDirectoryName(Main.ModPath)).Parent.FullName;
-		private static readonly String assetStudioPath = Path.Combine(Main.ModPath, @"AssetStudioModCLI_net472_win32_64\");
+		private static readonly String assetStudioPath = Path.Combine(Main.ModPath, @"AssetStudioModCLI_net472_win64_contained\");
 		private static readonly String assetStudioEXEName = "AssetStudioModCLI.exe";
 		private static readonly String importPathFull = System.IO.Path.Combine(dvFolderPath, @"DerailValley_Data\resources.assets");
 		private static readonly String exportPathFull = System.IO.Path.Combine(Main.ModPath, @"assets");
@@ -181,19 +181,16 @@ namespace RearrangedS282
 			//	- wait till the altfuture eula releases
 
 			var process = new System.Diagnostics.Process();
-			process.StartInfo.FileName = "cmd.exe";
+			process.StartInfo.FileName = Path.Combine(assetStudioPath, assetStudioEXEName);
 			process.StartInfo.RedirectStandardInput = true;
 			process.StartInfo.RedirectStandardOutput = true;
 			process.StartInfo.CreateNoWindow = true;
 			process.StartInfo.UseShellExecute = false;
-			process.Start();
-			String incantation = $"{assetStudioPath + assetStudioEXEName} \"{importPathFull}\" " +
+			process.StartInfo.Arguments =
+				$"\"{importPathFull}\" " +
 				$"-o \"{exportPathFull}\" " +
-				$"-t mesh " +
-				$"--filter-by-name \"{meshName}\"";
-			process.StandardInput.WriteLine(incantation);
-			process.StandardInput.Flush();
-			process.StandardInput.Close();
+				$"-t mesh --filter-by-name \"{meshName}\"";
+			process.Start();
 			process.WaitForExit();
 			//Main.Logger.Log(process.StandardOutput.ReadToEnd());
 		}
@@ -201,20 +198,19 @@ namespace RearrangedS282
 		//In previous versions of the mod, AssetStudio generated a bunch of log files. This cleans them up
 		private void clearAssetStudioLogs()
 		{
-			var process = new System.Diagnostics.Process();
-			process.StartInfo.FileName = "cmd.exe";
-			process.StartInfo.RedirectStandardInput = true;
-			process.StartInfo.RedirectStandardOutput = true;
-			process.StartInfo.CreateNoWindow = true;
-			process.StartInfo.UseShellExecute = false;
-			process.Start();
-			String incantation = $"rm {Main.ModPath}\\AssetStudioModCLI_net472_win32_64\\*.log";
-			Main.Logger.Log(incantation);
-			process.StandardInput.WriteLine(incantation);
-			process.StandardInput.Flush();
-			process.StandardInput.Close();
-			process.WaitForExit();
-			//Main.Logger.Log(process.StandardOutput.ReadToEnd());
+			//https://stackoverflow.com/questions/8132742/how-to-delete-file-of-certain-extension
+
+			DirectoryInfo di = new DirectoryInfo(assetStudioPath);
+			FileInfo[] logFiles = di.GetFiles("*.log")
+				.Where(p => p.Extension == ".log").ToArray();
+			foreach (FileInfo logFile in logFiles)
+			{
+				try
+				{
+					File.Delete(logFile.FullName);
+				}
+				catch { }
+			}
 		}
 
 		//mark part of mesh, to be either kept or destroyed with deleteMarkedPartOfMesh or

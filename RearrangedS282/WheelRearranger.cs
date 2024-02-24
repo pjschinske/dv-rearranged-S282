@@ -304,7 +304,12 @@ namespace RearrangedS282
 			SetupDrivers();
 
 			//set locomotive to initial wheel arrangement
-			if (Main.settings.spawnRandomWA)
+			int savedWA = ArrangementSaveManager.GetWheelArrangement(loco);
+			if (savedWA != -1)
+			{
+				SwitchWheelArrangement(savedWA);
+			}
+			else if (Main.settings.spawnRandomWA)
 			{
 				SwitchWheelArrangementRandom();
 			}
@@ -1302,6 +1307,8 @@ namespace RearrangedS282
 				- WheelArrangement.NumOfNondrivenWheels[(int)WheelArrangementType.s282])
 				/ 10.0f;
 			Main.Logger.Log("Derail Modifier: " + derailModifier);
+
+			ArrangementSaveManager.SetWheelArrangement(loco, waType);
 
 			HideLeadingWheels();
 			ResetBody();
