@@ -3,19 +3,21 @@ Here's how steam flows:
 ```mermaid
 graph TD;
 SteamEngine[Main cylinders]
-ThrottleCalculator[Steam chest]
+ThrottleCalculator[Throttle calculator]
+ThrottleCalculatorDummy[Throttle calculator dummy]
 BoosterCylinderCockOperator[Booster cylinder cock operator]
 BoosterIntake[Booster intake]
 BoosterExhaust[Booster exhaust]
 CylinderCocks[Cylinder cocks]
     subgraph Locomotive
-        Boiler-->Throttle-->ThrottleCalculator
+        Boiler-->ThrottleCalculator
         ThrottleCalculator-->SteamEngine
         SteamEngine-->Exhaust
     end
     subgraph Tender
-        ThrottleCalculator---->BoosterIntake
-        ThrottleCalculator---->BoosterCylinderCockOperator
+        ThrottleCalculator---->ThrottleCalculatorDummy
+		ThrottleCalculatorDummy-->BoosterIntake
+        ThrottleCalculatorDummy-->BoosterCylinderCockOperator
         BoosterIntake-->Booster
         Booster-->BoosterExhaust
         Booster-->CylinderCocks
@@ -26,14 +28,16 @@ Here's how air flows:
 graph TD;
 AirTank[Main air reservoir]
 ReverserPilotValve[Reverser pilot valve]
+ReverserPilotValveDummy[Reverser pilot valve dummy]
 BoosterCylinderCockOperator[Booster cylinder cock operator]
     subgraph Locomotive
         AirTank-->ReverserPilotValve
     end
     subgraph Tender
-        ReverserPilotValve-->BoosterCylinderCockOperator
+		ReverserPilotValve-->ReverserPilotValveDummy
+        ReverserPilotValveDummy-->BoosterCylinderCockOperator
         BoosterCylinderCockOperator-->Booster
-        ReverserPilotValve-->Clutch
+        ReverserPilotValveDummy-->Clutch
     end
 ```
 And here's how torque flows:
@@ -55,4 +59,6 @@ BoosterWheelslipController[WheelslipController]
     end
 ```
 
-This isn't quite how it works in real life; I'm not simulating the dome pilot valve or the preliminary throttle valve. Instead, that behavior is integrated into the `BoosterCylinderCockOperator` and the `ReverserPilotValve`.
+This isn't quite how it works in real life; we're not simulating the dome pilot valve or the preliminary throttle valve. Instead, that behavior is integrated into the `BoosterCylinderCockOperator` and the `ReverserPilotValve`.
+
+There are also now connections between the locomotive and the tender for lubrication (taken from the mechanical lubricator), "steam quality" (I forget what this is but it's taken from the boiler) and steam temperature (taken from the firebox, because on the S282 the steam temp is the same as the fire temp).
