@@ -3,7 +3,6 @@ Here's how steam flows:
 ```mermaid
 graph TD;
 SteamEngine[Main cylinders]
-ReverserPilotValve[Reverser pilot valve]
 ThrottleCalculator[Steam chest]
 BoosterCylinderCockOperator[Booster cylinder cock operator]
 BoosterIntake[Booster intake]
@@ -13,7 +12,6 @@ CylinderCocks[Cylinder cocks]
         Boiler-->Throttle-->ThrottleCalculator
         ThrottleCalculator-->SteamEngine
         SteamEngine-->Exhaust
-        ThrottleCalculator-->ReverserPilotValve
     end
     subgraph Tender
         ThrottleCalculator---->BoosterIntake
@@ -41,6 +39,9 @@ BoosterCylinderCockOperator[Booster cylinder cock operator]
 And here's how torque flows:
 ```mermaid
 graph TD;
+BoosterTraction[Traction]
+BoosterDrivingForce[DrivingForce]
+BoosterWheelslipController[WheelslipController]
     subgraph Locomotive
         SteamEngine-->Traction
         SteamEngine-->DrivingForce
