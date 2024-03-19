@@ -4,20 +4,22 @@ Here's how steam flows:
 graph TD;
 SteamEngine[Main cylinders]
 ThrottleCalculator[Throttle calculator]
-ThrottleCalculatorDummy[Throttle calculator dummy]
-BoosterCylinderCockOperator[Booster cylinder cock operator]
+BoosterThrottleDummy[Booster throttle dummy]
+BoosterCylinderCockOperator[Booster cylinder<br>cock operator]
 BoosterIntake[Booster intake]
 BoosterExhaust[Booster exhaust]
 CylinderCocks[Cylinder cocks]
+BoosterThrottle[Booster throttle]
     subgraph Locomotive
         Boiler-->ThrottleCalculator
         ThrottleCalculator-->SteamEngine
         SteamEngine-->Exhaust
+	ThrottleCalculator--->BoosterThrottle
     end
     subgraph Tender
-        ThrottleCalculator---->ThrottleCalculatorDummy
-		ThrottleCalculatorDummy-->BoosterIntake
-        ThrottleCalculatorDummy-->BoosterCylinderCockOperator
+        BoosterThrottle-->BoosterThrottleDummy
+	BoosterThrottleDummy-->BoosterIntake
+        BoosterThrottleDummy-->BoosterCylinderCockOperator
         BoosterIntake-->Booster
         Booster-->BoosterExhaust
         Booster-->CylinderCocks
@@ -28,13 +30,16 @@ Here's how air flows:
 graph TD;
 AirTank[Main air reservoir]
 ReverserPilotValve[Reverser pilot valve]
-ReverserPilotValveDummy[Reverser pilot valve dummy]
-BoosterCylinderCockOperator[Booster cylinder cock operator]
+ReverserPilotValveDummy[Reverser pilot<br>valve dummy]
+BoosterCylinderCockOperator[Booster cylinder<br>cock operator]
     subgraph Locomotive
         AirTank-->ReverserPilotValve
+	ReverserPilotValve-- Preliminary
+			        Throttle -->BoosterThrottle
+	ReverserPilotValve-- Clutch -->BoosterThrottle
     end
     subgraph Tender
-		ReverserPilotValve-->ReverserPilotValveDummy
+	ReverserPilotValve-- Clutch --->ReverserPilotValveDummy
         ReverserPilotValveDummy-->BoosterCylinderCockOperator
         BoosterCylinderCockOperator-->Booster
         ReverserPilotValveDummy-->Clutch
